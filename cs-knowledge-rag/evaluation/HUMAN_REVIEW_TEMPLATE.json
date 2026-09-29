@@ -1,0 +1,201 @@
+{
+  "rubric_version": "1.0",
+  "source_dataset": "evaluation/sample_questions.json",
+  "answerable_case_count": 12,
+  "records": [
+    {
+      "id": "E001",
+      "question": "What happened on 18 July 2026?",
+      "expected_claims": [],
+      "required_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+        "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B3",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B4",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B5",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B6",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "conflict_requirements": [
+        "If participation is mentioned, preserve the differing third-year versus third-and-fourth-year observations."
+      ],
+      "acceptable_scope": [
+        "Broad date activity should cover the event and meeting; attendance may be summarized but must use exact spreadsheet headers/cells."
+      ],
+      "review_notes": ""
+    },
+    {
+      "id": "E002",
+      "question": "What meetings happened on 18 July 2026?",
+      "expected_claims": [],
+      "required_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "conflict_requirements": [],
+      "acceptable_scope": [
+        "Meeting-focused answer; do not require the same-day event or attendance records."
+      ],
+      "review_notes": ""
+    },
+    {
+      "id": "E003",
+      "question": "Was Dr. Reena Nair present at the meeting on 18 July 2026?",
+      "expected_claims": [],
+      "required_evidence_ids": [
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2"
+      ],
+      "conflict_requirements": [],
+      "acceptable_scope": [
+        "Exact person/date attendance lookup."
+      ],
+      "review_notes": ""
+    },
+    {
+      "id": "E004",
+      "question": "When was the faculty meeting rescheduled?",
+      "expected_claims": [],
+      "required_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+        "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "conflict_requirements": [],
+      "acceptable_scope": [
+        "Notice page is the direct rescheduling source; do not require a fabricated normalized rescheduling record."
+      ],
+      "review_notes": ""
+    },
+    {
+      "id": "E005",
+      "question": "What was discussed about lab procurement?",
+      "expected_claims": [],
+      "required_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:4",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "conflict_requirements": [],
+      "acceptable_scope": [
+        "Keep spreadsheet meeting-record facts distinct from independently matched PDF text."
+      ],
+      "review_notes": ""
+    },
+    {
+      "id": "E006",
+      "question": "Who coordinated C-START?",
+      "expected_claims": [],
+      "required_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+        "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "conflict_requirements": [],
+      "acceptable_scope": [
+        "Claim correctness and citation correctness must be reviewed separately."
+      ],
+      "review_notes": ""
+    },
+    {
+      "id": "E007",
+      "question": "What happened on 10 August 2026 regarding the FDP?",
+      "expected_claims": [],
+      "required_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "conflict_requirements": [],
+      "acceptable_scope": [
+        "Keep the 10 August FDP planning meeting separate from the FDP event record."
+      ],
+      "review_notes": ""
+    },
+    {
+      "id": "E013",
+      "question": "What decisions were made regarding the FDP?",
+      "expected_claims": [],
+      "required_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "conflict_requirements": [],
+      "acceptable_scope": [
+        "Review both the 25 July scheduling decision and the 10 August resource-person decision."
+      ],
+      "review_notes": ""
+    },
+    {
+      "id": "E014",
+      "question": "What was reported about C-START participation?",
+      "expected_claims": [],
+      "required_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+        "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "conflict_requirements": [
+        "State both participant-category observations or explicitly report the discrepancy."
+      ],
+      "acceptable_scope": [
+        "Event participation facts may include count, category, coordinator, keynote, and feedback only when directly supported."
+      ],
+      "review_notes": ""
+    },
+    {
+      "id": "E015",
+      "question": "What happened on 25 July 2026?",
+      "expected_claims": [],
+      "required_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C2",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C3",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C4",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C5",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C6",
+        "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "conflict_requirements": [],
+      "acceptable_scope": [
+        "Verify every attendance claim against the 25-Jul-2026 Faculty Mtg header and exact cell value."
+      ],
+      "review_notes": ""
+    },
+    {
+      "id": "E016",
+      "question": "What happened on 10 August 2026?",
+      "expected_claims": [],
+      "required_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+        "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "conflict_requirements": [],
+      "acceptable_scope": [
+        "Distinguish scheduled, planned, and completed; keep the event and planning meeting separate."
+      ],
+      "review_notes": ""
+    },
+    {
+      "id": "E017",
+      "question": "How many participants were reported for C-START?",
+      "expected_claims": [],
+      "required_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+        "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "conflict_requirements": [
+        "Both sources report 45 but differ in participant category; do not silently reconcile them."
+      ],
+      "acceptable_scope": [
+        "The numeric answer 45 is necessary; a fully grounded answer also identifies the category discrepancy."
+      ],
+      "review_notes": ""
+    }
+  ]
+}

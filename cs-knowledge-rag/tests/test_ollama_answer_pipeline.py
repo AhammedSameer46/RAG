@@ -75,9 +75,12 @@ class OllamaAnswerPipelineIntegrationTests(unittest.TestCase):
             captured["timeout"] = timeout
             payload = json.loads(http_request.data)
             captured["prompt"] = payload["prompt"]
-            evidence_response = json.loads(
-                payload["prompt"].split("Evidence response (JSON):\n", 1)[1]
-            )
+            evidence_response = {
+                "status": "answerable",
+                "answer_context": json.loads(
+                    payload["prompt"].split("Evidence context (JSON):\n", 1)[1]
+                ),
+            }
             return FakeHTTPResponse(
                 self._model_payload(self._answerable_answer(evidence_response))
             )
@@ -96,7 +99,7 @@ class OllamaAnswerPipelineIntegrationTests(unittest.TestCase):
         self.assertEqual(captured["timeout"], 30.0)
         self.assertEqual(urlopen.call_count, 1)
         self.assertIn("Who coordinated C-START?", captured["prompt"])
-        self.assertIn("answer_context", captured["prompt"])
+        self.assertIn('"supporting_evidence"', captured["prompt"])
         self.assertNotIn("retriever", captured["prompt"].lower())
         self.assertNotIn("sample_normalized.json", captured["prompt"])
         self.assertNotEqual(expected_evidence, result["evidence_response"])

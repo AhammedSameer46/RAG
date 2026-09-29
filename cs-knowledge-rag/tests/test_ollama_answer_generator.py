@@ -14,6 +14,8 @@ from cs_ingest.ollama_answer_generator import (
     OllamaHTTPError,
     OllamaResponseError,
     OllamaTimeoutError,
+    _SYSTEM_PROMPT,
+    _user_prompt,
 )
 from cs_ingest.pipeline import QueryRetrievalPipeline
 
@@ -74,9 +76,45 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
         self.assertEqual(payload["format"], "json")
         self.assertFalse(payload["stream"])
         self.assertIn("Who coordinated C-START?", payload["prompt"])
-        self.assertIn("answer_context", payload["prompt"])
+        self.assertIn("Evidence context (JSON):", payload["prompt"])
+        self.assertIn('"supporting_evidence"', payload["prompt"])
+        self.assertNotIn("selection", payload["prompt"])
+        self.assertNotIn("query_understanding", payload["prompt"])
+        self.assertNotIn('"sources"', payload["prompt"])
+        self.assertNotIn('"coverage"', payload["prompt"])
         self.assertNotIn("sample_normalized.json", payload["prompt"])
         self.assertNotIn("retriever", payload["prompt"].lower())
+
+    def test_system_prompt_describes_explicit_answer_contract(self):
+        for field in (
+            "status",
+            "answer",
+            "citations",
+            "evidence_id",
+            "source_id",
+            "filename",
+            "location",
+        ):
+            self.assertIn(field, _SYSTEM_PROMPT)
+        self.assertIn('"answered | insufficient_evidence | clarification_required"', _SYSTEM_PROMPT)
+        self.assertIn("EXACTLY these three top-level fields", _SYSTEM_PROMPT)
+
+    def test_user_prompt_contains_only_question_and_answer_context(self):
+        response = deepcopy(self.evidence_response)
+        response["selection"] = {"excluded_evidence_ids": ["excluded"]}
+        response["coverage"] = {"supporting_coverage_complete": False}
+        prompt = _user_prompt("Question", response)
+        expected_context = json.dumps(
+            response["answer_context"], sort_keys=True
+        )
+        self.assertEqual(
+            prompt,
+            "Question:\nQuestion\n\nEvidence context (JSON):\n" + expected_context,
+        )
+        self.assertNotIn("excluded_evidence_ids", prompt)
+        self.assertNotIn("supporting_coverage_complete", prompt)
+        self.assertNotIn("query_understanding", prompt)
+        self.assertNotIn('"sources"', prompt)
 
     def test_non_answerable_statuses_do_not_call_ollama(self):
         generator = OllamaAnswerGenerator()

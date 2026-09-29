@@ -8,6 +8,7 @@ from typing import Any
 from urllib import error, request
 
 from .answer_generator import AnswerGenerator
+from .citation_builder import citation_handles
 
 _STATUSES = {"answered", "insufficient_evidence", "clarification_required"}
 _DEFAULT_MODEL = "SET_OLLAMA_MODEL"
@@ -52,7 +53,7 @@ class OllamaAnswerGenerator:
         """Generate an answer, or raise an explicit provider error."""
         status = evidence_response.get("status")
         if status in {"clarification_required", "insufficient_evidence"}:
-            return {"status": status, "answer": "", "citations": []}
+            return {"status": status, "answer": "", "citation_refs": []}
         if status != "answerable":
             raise OllamaResponseError("Evidence response status is unsupported.")
 
@@ -85,12 +86,29 @@ class OllamaAnswerGenerator:
 
 
 def _user_prompt(question: str, evidence_response: dict[str, Any]) -> str:
+    context = _model_answer_context(evidence_response)
     return (
         "Question:\n"
         + question
         + "\n\nEvidence context (JSON):\n"
-        + json.dumps(evidence_response["answer_context"], sort_keys=True)
+        + json.dumps(context, sort_keys=True)
     )
+
+
+def _model_answer_context(evidence_response: dict[str, Any]) -> dict[str, Any]:
+    context = json.loads(json.dumps(evidence_response["answer_context"]))
+    handles = citation_handles(evidence_response)
+    for collection in ("supporting_evidence", "independent_evidence"):
+        wrapped = []
+        for evidence in context.get(collection, []):
+            handle = next(
+                handle
+                for handle, selected in handles.items()
+                if selected["evidence_id"] == evidence["evidence_id"]
+            )
+            wrapped.append({"citation_ref": handle, "evidence": evidence})
+        context[collection] = wrapped
+    return context
 
 
 def _parse_response(response_body: bytes) -> dict[str, Any]:
@@ -102,11 +120,13 @@ def _parse_response(response_body: bytes) -> dict[str, Any]:
         raise OllamaResponseError("Ollama returned malformed JSON.") from exc
     if not isinstance(answer, dict):
         raise OllamaResponseError("Ollama answer must be a JSON object.")
-    required = {"status", "answer", "citations"}
-    if not required.issubset(answer):
+    required = {"status", "answer", "citation_refs"}
+    if set(answer) != required:
         raise OllamaResponseError("Ollama answer is missing required fields.")
     if answer["status"] not in _STATUSES:
         raise OllamaResponseError("Ollama answer status is unsupported.")
+    if not isinstance(answer["citation_refs"], list):
+        raise OllamaResponseError("Ollama citation_refs must be a list.")
     return answer
 
 
@@ -124,14 +144,7 @@ Return ONLY one JSON object with EXACTLY these three top-level fields:
 {
   "status": "answered | insufficient_evidence | clarification_required",
   "answer": "string",
-  "citations": [
-    {
-      "evidence_id": "string",
-      "source_id": "string",
-      "filename": "string",
-      "location": {}
-    }
-  ]
+  "citation_refs": ["E1", "E2"]
 }
 
 Rules:
@@ -141,16 +154,11 @@ Rules:
 - For a clarification request, status MUST be exactly "clarification_required".
 - answer MUST be a non-empty string for status "answered".
 - For status "insufficient_evidence" or "clarification_required", answer MUST be an empty string.
-- citations MUST be a non-empty array when status is "answered".
-- citations MUST be an empty array for status "insufficient_evidence" or "clarification_required".
-- Every citation MUST be an object.
-- evidence_id MUST exactly match an evidence_id from the supplied evidence.
-- source_id MUST exactly match the source_id belonging to that evidence.
-- filename MUST exactly match the filename belonging to that evidence.
-- location MUST exactly match the supplied provenance location.
-- Never use a source_id by itself as an evidence_id.
-- Do not fabricate evidence IDs, source IDs, filenames, or locations.
-- Do not omit location.
+- citation_refs MUST be a non-empty array when status is "answered".
+- citation_refs MUST be an empty array for status "insufficient_evidence" or "clarification_required".
+- Every citation ref MUST exactly match a citation_ref handle supplied in the evidence context.
+- Never output source IDs, evidence IDs, filenames, or locations.
+- Do not fabricate citation refs.
 - Do not add extra top-level fields.
 - Do not output markdown.
 - Do not output prose outside the JSON object.
@@ -159,23 +167,7 @@ Rules:
 - Do not add sources.
 - Do not add selection metadata.
 
-The location object is provider-independent and must reproduce the exact
-location fields supplied for the cited evidence. It may contain fields such as:
-
-PDF:
-{
-  "page": 1
-}
-
-Spreadsheet:
-{
-  "sheet": "Faculty Attendance",
-  "row": 6,
-  "cell": "B6"
-}
-
-Do not require every possible location field. Reproduce exactly the fields
-supplied for the cited evidence.
+The application will deterministically attach exact provenance after generation.
 """
 
 

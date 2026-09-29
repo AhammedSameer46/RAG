@@ -9,6 +9,7 @@ from typing import Any
 
 from .answer_generator import AnswerGenerator
 from .answer_contract import validate_answer
+from .citation_builder import CitationBuilder
 from .evidence_response import build_evidence_response
 from .evidence_selector import EvidenceSelectionConfig, EvidenceSelector
 from .mock_answer_generator import MockAnswerGenerator
@@ -22,6 +23,7 @@ class AnswerPipeline:
         answer_generator: AnswerGenerator | None = None,
         evidence_selector: EvidenceSelector | None = None,
         evidence_selection_config: EvidenceSelectionConfig | None = None,
+        citation_builder: CitationBuilder | None = None,
     ) -> None:
         if evidence_selection_config is not None and evidence_selector is None:
             raise ValueError(
@@ -31,6 +33,7 @@ class AnswerPipeline:
         self.answer_generator = answer_generator or MockAnswerGenerator()
         self.evidence_selector = evidence_selector
         self.evidence_selection_config = evidence_selection_config
+        self.citation_builder = citation_builder or CitationBuilder()
 
     @classmethod
     def from_json(
@@ -39,12 +42,14 @@ class AnswerPipeline:
         answer_generator: AnswerGenerator | None = None,
         evidence_selector: EvidenceSelector | None = None,
         evidence_selection_config: EvidenceSelectionConfig | None = None,
+        citation_builder: CitationBuilder | None = None,
     ) -> "AnswerPipeline":
         return cls(
             QueryRetrievalPipeline.from_json(path),
             answer_generator,
             evidence_selector,
             evidence_selection_config,
+            citation_builder,
         )
 
     def run(self, question: str) -> dict[str, Any]:
@@ -75,6 +80,10 @@ class AnswerPipeline:
             answer = _generate(
                 self.answer_generator, question, generator_evidence_response
             )
+            if "citation_refs" in answer:
+                answer = self.citation_builder.build(
+                    answer, generator_evidence_response
+                )
         validation = validate_answer(answer, generator_evidence_response)
         return {
             "question": question,

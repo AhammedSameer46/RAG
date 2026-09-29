@@ -57,11 +57,10 @@ class OllamaAnswerPipelineIntegrationTests(unittest.TestCase):
         }
 
     def _answerable_answer(self, evidence_response):
-        evidence = evidence_response["answer_context"]["supporting_evidence"][0]
         return {
             "status": "answered",
             "answer": "The retrieved evidence identifies the coordinator.",
-            "citations": [self._citation(evidence)],
+            "citation_refs": ["E1"],
         }
 
     def test_answerable_question_uses_real_pipeline_and_validates(self):
@@ -112,14 +111,7 @@ class OllamaAnswerPipelineIntegrationTests(unittest.TestCase):
         invalid_answer = {
             "status": "answered",
             "answer": "Unsupported citation.",
-            "citations": [
-                {
-                    "evidence_id": "not-retrieved",
-                    "source_id": "unknown",
-                    "filename": "unknown.pdf",
-                    "location": {"page": 1},
-                }
-            ],
+            "citation_refs": ["E99"],
         }
         pipeline = AnswerPipeline(
             self.query_pipeline,
@@ -129,13 +121,8 @@ class OllamaAnswerPipelineIntegrationTests(unittest.TestCase):
             "cs_ingest.ollama_answer_generator.request.urlopen",
             return_value=FakeHTTPResponse(self._model_payload(invalid_answer)),
         ):
-            result = pipeline.run("Who coordinated C-START?")
-        self.assertFalse(result["validation"]["valid"])
-        self.assertEqual(result["answer"], invalid_answer)
-        self.assertIn(
-            "UNKNOWN_EVIDENCE_ID",
-            {error["code"] for error in result["validation"]["errors"]},
-        )
+            with self.assertRaises(ValueError):
+                pipeline.run("Who coordinated C-START?")
 
     def test_malformed_model_json_raises_provider_error(self):
         pipeline = AnswerPipeline(self.query_pipeline, OllamaAnswerGenerator())

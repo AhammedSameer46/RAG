@@ -1,0 +1,429 @@
+[
+  {
+    "id": "E001",
+    "question": "What happened on 18 July 2026?",
+    "expected_status": "answerable",
+    "expected_record_types": [
+      "attendance",
+      "event",
+      "meeting"
+    ],
+    "expected_source_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a"
+    ],
+    "expected_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B3",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B4",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B5",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B6",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_supporting_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B3",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B4",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B5",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B6",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_independent_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "notes": "Exact-date activity query returns meeting, event, and attendance records with PDF and spreadsheet provenance."
+  },
+  {
+    "id": "E002",
+    "question": "What meetings happened on 18 July 2026?",
+    "expected_status": "answerable",
+    "expected_record_types": [
+      "meeting"
+    ],
+    "expected_source_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a"
+    ],
+    "expected_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_supporting_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_independent_evidence_ids": [],
+    "notes": "Meeting record-type filter must not include the same-day C-START event or attendance records."
+  },
+  {
+    "id": "E003",
+    "question": "Was Dr. Reena Nair present at the meeting on 18 July 2026?",
+    "expected_status": "answerable",
+    "expected_record_types": [
+      "attendance"
+    ],
+    "expected_source_ids": [
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35"
+    ],
+    "expected_evidence_ids": [
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2"
+    ],
+    "expected_supporting_evidence_ids": [
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2"
+    ],
+    "expected_independent_evidence_ids": [],
+    "notes": "Exact person and date attendance lookup."
+  },
+  {
+    "id": "E004",
+    "question": "When was the faculty meeting rescheduled?",
+    "expected_status": "answerable",
+    "expected_record_types": [],
+    "expected_source_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+      "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a"
+    ],
+    "expected_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+      "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_supporting_evidence_ids": [],
+    "expected_independent_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+      "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "notes": "Date-role retrieval returns date evidence without inventing a normalized rescheduled-date record."
+  },
+  {
+    "id": "E005",
+    "question": "What was discussed about lab procurement?",
+    "expected_status": "answerable",
+    "expected_record_types": [
+      "meeting"
+    ],
+    "expected_source_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a"
+    ],
+    "expected_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:4",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_supporting_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:4"
+    ],
+    "expected_independent_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:4",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "notes": "The PDF keyword hit is independently matched and must not be presented as support for the spreadsheet meeting record."
+  },
+  {
+    "id": "E006",
+    "question": "Who coordinated C-START?",
+    "expected_status": "answerable",
+    "expected_record_types": [
+      "event"
+    ],
+    "expected_source_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a"
+    ],
+    "expected_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:1",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:4",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:5",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_supporting_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_independent_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:1",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:4",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:5",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "notes": "C-START remains a conservative keyword; the current deterministic keyword matcher also returns other matching worksheet evidence."
+  },
+  {
+    "id": "E007",
+    "question": "What happened on 10 August 2026 regarding the FDP?",
+    "expected_status": "answerable",
+    "expected_record_types": [
+      "meeting"
+    ],
+    "expected_source_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a"
+    ],
+    "expected_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_supporting_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5"
+    ],
+    "expected_independent_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "notes": "Mixed exact-date and FDP keyword query; unrelated keyword evidence remains independently matched."
+  },
+  {
+    "id": "E008",
+    "question": "Which meetings did Prof. Sarah Thomas attend?",
+    "expected_status": "clarification_required",
+    "expected_record_types": [],
+    "expected_source_ids": [],
+    "expected_evidence_ids": [],
+    "expected_supporting_evidence_ids": [],
+    "expected_independent_evidence_ids": [],
+    "notes": "Current query understanding reports the sample attendance coverage limitation and does not execute retrieval."
+  },
+  {
+    "id": "E009",
+    "question": "Who attended the C-START event?",
+    "expected_status": "clarification_required",
+    "expected_record_types": [],
+    "expected_source_ids": [],
+    "expected_evidence_ids": [],
+    "expected_supporting_evidence_ids": [],
+    "expected_independent_evidence_ids": [],
+    "notes": "The current sample does not contain a complete event attendee list."
+  },
+  {
+    "id": "E010",
+    "question": "What happened on 18 July?",
+    "expected_status": "clarification_required",
+    "expected_record_types": [],
+    "expected_source_ids": [],
+    "expected_evidence_ids": [],
+    "expected_supporting_evidence_ids": [],
+    "expected_independent_evidence_ids": [],
+    "notes": "The year is missing and must not be guessed."
+  },
+  {
+    "id": "E011",
+    "question": "Tell me something about the department.",
+    "expected_status": "clarification_required",
+    "expected_record_types": [],
+    "expected_source_ids": [],
+    "expected_evidence_ids": [],
+    "expected_supporting_evidence_ids": [],
+    "expected_independent_evidence_ids": [],
+    "notes": "The request is too broad for a bounded deterministic retrieval."
+  },
+  {
+    "id": "E012",
+    "question": "What happened on 10 January 2099?",
+    "expected_status": "insufficient_evidence",
+    "expected_record_types": [],
+    "expected_source_ids": [],
+    "expected_evidence_ids": [],
+    "expected_supporting_evidence_ids": [],
+    "expected_independent_evidence_ids": [],
+    "notes": "The exact date is executable but no matching records or evidence exist."
+  },
+  {
+    "id": "E013",
+    "question": "What decisions were made regarding the FDP?",
+    "expected_status": "answerable",
+    "expected_record_types": [
+      "meeting"
+    ],
+    "expected_source_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a"
+    ],
+    "expected_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_supporting_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5"
+    ],
+    "expected_independent_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "notes": "The literal question word 'decisions' is not required as a keyword; FDP is the retrieval concept."
+  },
+  {
+    "id": "E014",
+    "question": "What was reported about C-START participation?",
+    "expected_status": "answerable",
+    "expected_record_types": [
+      "event"
+    ],
+    "expected_source_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a"
+    ],
+    "expected_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:1",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:4",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:5",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_supporting_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_independent_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:1",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:4",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:5",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "notes": "Conflict-preservation case: both PDF observations report 45 participants but differ in the stated year groups. Do not reconcile them."
+  },
+  {
+    "id": "E015",
+    "question": "What happened on 25 July 2026?",
+    "expected_status": "answerable",
+    "expected_record_types": [
+      "attendance",
+      "meeting"
+    ],
+    "expected_source_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35",
+      "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a"
+    ],
+    "expected_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C2",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C3",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C4",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C5",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C6",
+      "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_supporting_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C2",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C3",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C4",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C5",
+      "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C6"
+    ],
+    "expected_independent_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+      "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "notes": "Exact date demonstrates separate meeting and attendance records plus unrelated date-mention evidence."
+  },
+  {
+    "id": "E016",
+    "question": "What happened on 10 August 2026?",
+    "expected_status": "answerable",
+    "expected_record_types": [
+      "event",
+      "meeting"
+    ],
+    "expected_source_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+      "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a"
+    ],
+    "expected_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+      "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_supporting_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5"
+    ],
+    "expected_independent_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+      "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "notes": "Same-day meeting and event must remain separate records."
+  },
+  {
+    "id": "E017",
+    "question": "How many participants were reported for C-START?",
+    "expected_status": "answerable",
+    "expected_record_types": [
+      "event"
+    ],
+    "expected_source_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a"
+    ],
+    "expected_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:1",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:4",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:5",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_supporting_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "expected_independent_evidence_ids": [
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:1",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:4",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:5",
+      "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+      "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+      "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+    ],
+    "notes": "Conflict-preservation case: both PDF observations state 45 participants while differing in the stated year groups."
+  }
+]

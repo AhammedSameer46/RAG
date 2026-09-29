@@ -1,0 +1,115 @@
+import unittest
+from copy import deepcopy
+from pathlib import Path
+
+from cs_ingest.answer_generator import AnswerGenerator
+from cs_ingest.answer_pipeline import AnswerPipeline
+from cs_ingest.mock_answer_generator import MockAnswerGenerator
+from cs_ingest.pipeline import QueryRetrievalPipeline
+
+
+ROOT = Path(__file__).parents[1]
+
+
+class RecordingGenerator:
+    def __init__(self):
+        self.question = None
+        self.evidence_response = None
+
+    def generate(self, question, evidence_response):
+        self.question = question
+        self.evidence_response = evidence_response
+        evidence = evidence_response["answer_context"]["supporting_evidence"][0]
+        return {
+            "status": "answered",
+            "answer": "Recorded evidence.",
+            "citations": [
+                {
+                    "evidence_id": evidence["evidence_id"],
+                    "source_id": evidence["source_id"],
+                    "filename": evidence["filename"],
+                    "location": {
+                        field: evidence[field]
+                        for field in ("page", "sheet", "row", "cell", "cell_range")
+                        if field in evidence
+                    },
+                }
+            ],
+        }
+
+
+class InvalidGenerator:
+    def generate(self, question, evidence_response):
+        del question, evidence_response
+        return {"status": "answered", "answer": "Uncited claim.", "citations": []}
+
+
+class AnswerGeneratorInterfaceTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.query_pipeline = QueryRetrievalPipeline.from_json(
+            ROOT / "output" / "sample_normalized.json"
+        )
+
+    def test_mock_generator_can_be_injected(self):
+        generator = MockAnswerGenerator()
+        pipeline = AnswerPipeline(self.query_pipeline, generator)
+        result = pipeline.run("What happened on 18 July 2026?")
+        self.assertTrue(result["validation"]["valid"])
+
+    def test_custom_generator_receives_question_and_evidence_response(self):
+        generator = RecordingGenerator()
+        self.assertIsInstance(generator, AnswerGenerator)
+        pipeline = AnswerPipeline(self.query_pipeline, generator)
+        question = "Who coordinated C-START?"
+        result = pipeline.run(question)
+        self.assertEqual(generator.question, question)
+        self.assertIsNotNone(generator.evidence_response)
+        self.assertIn("answer_context", generator.evidence_response)
+        self.assertNotIn("retrieval", generator.evidence_response)
+        self.assertNotIn("sample_normalized.json", str(generator.evidence_response))
+        self.assertTrue(result["validation"]["valid"])
+
+    def test_custom_generator_output_is_validated(self):
+        pipeline = AnswerPipeline(self.query_pipeline, RecordingGenerator())
+        result = pipeline.run("What happened on 18 July 2026?")
+        self.assertEqual(result["answer"]["answer"], "Recorded evidence.")
+        self.assertEqual(result["validation"], {"valid": True, "errors": []})
+
+    def test_invalid_custom_generator_output_is_preserved_and_rejected(self):
+        pipeline = AnswerPipeline(self.query_pipeline, InvalidGenerator())
+        result = pipeline.run("What happened on 18 July 2026?")
+        self.assertEqual(result["answer"]["answer"], "Uncited claim.")
+        self.assertFalse(result["validation"]["valid"])
+        self.assertIn(
+            "NO_CITATIONS",
+            {error["code"] for error in result["validation"]["errors"]},
+        )
+
+    def test_clarification_does_not_call_custom_generator(self):
+        generator = RecordingGenerator()
+        pipeline = AnswerPipeline(self.query_pipeline, generator)
+        result = pipeline.run("What happened on 18 July?")
+        self.assertEqual(result["answer"]["status"], "clarification_required")
+        self.assertIsNone(generator.question)
+        self.assertTrue(result["validation"]["valid"])
+
+    def test_insufficient_evidence_does_not_call_custom_generator(self):
+        generator = RecordingGenerator()
+        pipeline = AnswerPipeline(self.query_pipeline, generator)
+        result = pipeline.run("What happened on 10 January 2099?")
+        self.assertEqual(result["answer"]["status"], "insufficient_evidence")
+        self.assertIsNone(generator.question)
+        self.assertTrue(result["validation"]["valid"])
+
+    def test_custom_generator_does_not_mutate_evidence_response(self):
+        generator = RecordingGenerator()
+        pipeline = AnswerPipeline(self.query_pipeline, generator)
+        result = pipeline.run("Who coordinated C-START?")
+        snapshot = deepcopy(result["evidence_response"])
+        generator.generate("again", result["evidence_response"])
+        self.assertEqual(result["evidence_response"], snapshot)
+
+
+if __name__ == "__main__":
+    unittest.main()

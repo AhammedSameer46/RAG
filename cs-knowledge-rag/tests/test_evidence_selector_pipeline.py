@@ -3,25 +3,13 @@ from copy import deepcopy
 from pathlib import Path
 
 from cs_ingest.answer_pipeline import AnswerPipeline
+from cs_ingest.claim_answer_contract import ClaimAnswerContractError
 from cs_ingest.evidence_response import build_evidence_response
 from cs_ingest.evidence_selector import EvidenceSelectionConfig, EvidenceSelector
 from cs_ingest.pipeline import QueryRetrievalPipeline
 
 
 ROOT = Path(__file__).parents[1]
-
-
-def _citation(evidence):
-    return {
-        "evidence_id": evidence["evidence_id"],
-        "source_id": evidence["source_id"],
-        "filename": evidence["filename"],
-        "location": {
-            field: evidence[field]
-            for field in ("page", "sheet", "row", "cell", "cell_range")
-            if field in evidence
-        },
-    }
 
 
 class RecordingGenerator:
@@ -37,8 +25,7 @@ class RecordingGenerator:
             evidence = self.excluded_evidence
         return {
             "status": "answered",
-            "answer": "Grounded answer.",
-            "citations": [_citation(evidence)],
+            "claims": [{"text": "Grounded answer.", "citation_refs": ["E99" if self.citation_source == "excluded" else "E1"]}],
         }
 
 
@@ -49,7 +36,7 @@ class CountingGenerator:
     def generate(self, question, evidence_response):
         del question, evidence_response
         self.called = True
-        return {"status": "answered", "answer": "unexpected", "citations": []}
+        return {"status": "answered", "claims": [{"text": "unexpected", "citation_refs": []}]}
 
 
 class EvidenceSelectorPipelineTests(unittest.TestCase):
@@ -128,14 +115,8 @@ class EvidenceSelectorPipelineTests(unittest.TestCase):
             )
             if evidence["evidence_id"] in excluded_ids
         )
-        result = self.make_pipeline(generator).run(
-            "What happened on 18 July 2026?"
-        )
-        self.assertFalse(result["validation"]["valid"])
-        self.assertIn(
-            "UNKNOWN_EVIDENCE_ID",
-            {error["code"] for error in result["validation"]["errors"]},
-        )
+        with self.assertRaises(ClaimAnswerContractError):
+            self.make_pipeline(generator).run("What happened on 18 July 2026?")
 
     def test_selected_provenance_and_metadata_are_preserved(self):
         generator = RecordingGenerator()

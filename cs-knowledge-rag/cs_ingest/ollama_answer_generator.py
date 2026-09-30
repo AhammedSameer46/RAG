@@ -53,7 +53,7 @@ class OllamaAnswerGenerator:
         """Generate an answer, or raise an explicit provider error."""
         status = evidence_response.get("status")
         if status in {"clarification_required", "insufficient_evidence"}:
-            return {"status": status, "answer": "", "citation_refs": []}
+            return {"status": status, "claims": []}
         if status != "answerable":
             raise OllamaResponseError("Evidence response status is unsupported.")
 
@@ -120,13 +120,13 @@ def _parse_response(response_body: bytes) -> dict[str, Any]:
         raise OllamaResponseError("Ollama returned malformed JSON.") from exc
     if not isinstance(answer, dict):
         raise OllamaResponseError("Ollama answer must be a JSON object.")
-    required = {"status", "answer", "citation_refs"}
+    required = {"status", "claims"}
     if set(answer) != required:
         raise OllamaResponseError("Ollama answer is missing required fields.")
     if answer["status"] not in _STATUSES:
         raise OllamaResponseError("Ollama answer status is unsupported.")
-    if not isinstance(answer["citation_refs"], list):
-        raise OllamaResponseError("Ollama citation_refs must be a list.")
+    if not isinstance(answer["claims"], list):
+        raise OllamaResponseError("Ollama claims must be a list.")
     return answer
 
 
@@ -143,8 +143,12 @@ Return ONLY one JSON object with EXACTLY these three top-level fields:
 
 {
   "status": "answered | insufficient_evidence | clarification_required",
-  "answer": "string",
-  "citation_refs": ["E1", "E2"]
+  "claims": [
+    {
+      "text": "atomic factual claim",
+      "citation_refs": ["E1", "E2"]
+    }
+  ]
 }
 
 Rules:
@@ -152,11 +156,15 @@ Rules:
 - For an answerable question, status MUST be exactly "answered".
 - For insufficient evidence, status MUST be exactly "insufficient_evidence".
 - For a clarification request, status MUST be exactly "clarification_required".
-- answer MUST be a non-empty string for status "answered".
-- For status "insufficient_evidence" or "clarification_required", answer MUST be an empty string.
-- citation_refs MUST be a non-empty array when status is "answered".
-- citation_refs MUST be an empty array for status "insufficient_evidence" or "clarification_required".
+- claims MUST be a non-empty array for status "answered".
+- claims MUST be an empty array for status "insufficient_evidence" or "clarification_required".
+- Each answered claim MUST contain non-empty text and at least one citation_ref.
 - Every citation ref MUST exactly match a citation_ref handle supplied in the evidence context.
+- Claims MUST be atomic; do not combine unrelated facts in one claim.
+- Every factual claim must cite the evidence that directly supports that claim.
+- Conflicting observations MUST remain separate, attributed claims; do not reconcile them.
+- Do not merge planning, scheduling, and completion into one claim.
+- Handles are the ONLY citation identifiers allowed.
 - Never output source IDs, evidence IDs, filenames, or locations.
 - Do not fabricate citation refs.
 - Do not add extra top-level fields.

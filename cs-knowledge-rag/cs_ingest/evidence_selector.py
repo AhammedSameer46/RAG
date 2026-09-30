@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+import hashlib
 from copy import deepcopy
 from dataclasses import dataclass
 from typing import Any
@@ -62,6 +63,28 @@ class EvidenceSelector:
         date_role = filters.get("date_role")
         conflicts = _detect_conflicts(records)
         conflict_ids = {eid for conflict in conflicts for eid in conflict["evidence_ids"]}
+        coverage_groups = _derive_coverage_groups(
+            records, all_units, record_by_evidence, filters, query_understanding
+        )
+        grouped_ids = {
+            evidence_id
+            for group in coverage_groups
+            for evidence_id in group["evidence_ids"]
+        }
+        primary_ids = _primary_date_activity_ids(
+            all_units, record_by_evidence, query_understanding, date
+        )
+        if primary_ids:
+            coverage_groups.append(
+                {
+                    "coverage_group_id": _stable_group_id(
+                        "date_activity_primary", sorted(primary_ids)
+                    ),
+                    "kind": "primary_record_types",
+                    "evidence_ids": sorted(primary_ids),
+                    "reason": "distinct directly relevant record types.",
+                }
+            )
 
         ranked = []
         for unit, role in all_units:
@@ -95,18 +118,21 @@ class EvidenceSelector:
             if overlap:
                 score += overlap * 10
                 reasons.append("keyword")
-            if evidence_id in conflict_ids:
+            if evidence_id in grouped_ids:
                 score += 90
                 reasons.append("conflict_protected")
+            if evidence_id in primary_ids:
+                score += 80
+                reasons.append("primary_coverage")
             score += _specificity(unit)
-            if role == "supporting":
+            if evidence_id in grouped_ids or evidence_id in primary_ids:
                 priority_tier = 0
-            elif evidence_id in conflict_ids:
-                priority_tier = 1
+            elif role == "supporting":
+                priority_tier = 0
             elif record:
-                priority_tier = 3
+                priority_tier = 2
             else:
-                priority_tier = 4
+                priority_tier = 3
             ranked.append(
                 (priority_tier, -score, evidence_id, unit, role, reasons, record)
             )
@@ -164,7 +190,19 @@ class EvidenceSelector:
         selected_records_copy = deepcopy(selected_records)
         excluded_ids = sorted({item["evidence_id"] for item in excluded})
         selected_ids = {unit["evidence_id"] for unit, _, _, _ in selected}
-        conflict_included = conflict_ids <= selected_ids
+        conflict_coverage = [
+            _group_coverage(group, selected_ids, excluded)
+            for group in coverage_groups
+            if group["kind"] == "conflict"
+        ]
+        coverage_details = [
+            _group_coverage(group, selected_ids, excluded)
+            for group in coverage_groups
+        ]
+        conflict_included = all(
+            item["complete"] for item in conflict_coverage
+        )
+        coverage_complete = all(item["complete"] for item in coverage_details)
         return {
             "status": status,
             "selected_records": selected_records_copy,
@@ -194,6 +232,9 @@ class EvidenceSelector:
                         item["role"] == "independent" for item in excluded
                     ),
                     "conflict_coverage_complete": conflict_included,
+                    "conflict_groups": conflict_coverage,
+                    "coverage_groups": coverage_details,
+                    "coverage_complete": coverage_complete,
                 },
                 "evidence_needed_to_answer": sorted(
                     unit["evidence_id"]
@@ -240,6 +281,9 @@ def _empty_result(
                 "supporting_coverage_complete": True,
                 "independent_coverage_complete": True,
                 "conflict_coverage_complete": True,
+                "conflict_groups": [],
+                "coverage_groups": [],
+                "coverage_complete": records == 0 and evidence == 0,
             },
             "evidence_needed_to_answer": [],
             "evidence_included_for_conflict": [],
@@ -365,16 +409,129 @@ def _detect_conflicts(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
             if item.get("source_statement")
         }
         if len(values) > 1:
+            evidence_ids = sorted(
+                item.get("evidence_id")
+                for item in observations
+                if item.get("evidence_id")
+            )
+            signature = "|".join(evidence_ids) + "|participant_category"
             conflicts.append(
                 {
-                    "record_id": record.get("record_id"),
-                    "dimension": "participant_category",
-                    "values": sorted(values),
-                    "evidence_ids": sorted(
-                        item.get("evidence_id")
-                        for item in observations
-                        if item.get("evidence_id")
-                    ),
+                "conflict_group_id": "conflict:"
+                + hashlib.sha256(signature.encode("utf-8")).hexdigest()[:16],
+                "record_id": record.get("record_id"),
+                "dimension": "participant_category",
+                "values": sorted(values),
+                "evidence_ids": evidence_ids,
                 }
             )
     return conflicts
+
+
+def _derive_coverage_groups(
+    records: list[dict[str, Any]],
+    units: list[tuple[dict[str, Any], str]],
+    record_by_evidence: dict[str, dict[str, Any]],
+    filters: dict[str, Any],
+    query_understanding: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Derive deterministic groups whose members should be considered together."""
+    unit_ids = {unit["evidence_id"] for unit, _ in units}
+    groups: list[dict[str, Any]] = []
+    for conflict in _detect_conflicts(records):
+        ids = sorted(unit_ids & set(conflict["evidence_ids"]))
+        if len(ids) > 1:
+            groups.append(
+                {
+                "coverage_group_id": conflict["conflict_group_id"],
+                "kind": "conflict",
+                "evidence_ids": ids,
+                "reason": "participant observations differ across selected evidence.",
+                }
+            )
+
+    if query_understanding.get("intent") == "date_activity":
+        date = filters.get("date")
+        date_records = [
+            record
+            for record in records
+            if date and date in _record_dates(record)
+        ]
+        for record in date_records:
+            attrs = record.get("attributes", {})
+            if record.get("record_type") != "meeting":
+                continue
+            meeting_type = str(attrs.get("meeting_type", "")).casefold()
+            if not any(term in meeting_type for term in ("planning", "scheduled")):
+                continue
+            companions = [
+                candidate
+                for candidate in date_records
+                if candidate is not record
+                and candidate.get("record_type") == "event"
+                and candidate.get("attributes", {}).get("status")
+            ]
+            for companion in companions:
+                ids = sorted(
+                    evidence_id
+                    for evidence_id, candidate in record_by_evidence.items()
+                    if candidate in (record, companion) and evidence_id in unit_ids
+                )
+                if len(ids) > 1:
+                    groups.append(
+                        {
+                            "coverage_group_id": _stable_group_id(
+                                "lifecycle", ids
+                            ),
+                            "kind": "lifecycle",
+                            "evidence_ids": ids,
+                            "reason": "records describe related lifecycle stages.",
+                        }
+                    )
+    return sorted(groups, key=lambda group: group["coverage_group_id"])
+
+
+def _primary_date_activity_ids(
+    units: list[tuple[dict[str, Any], str]],
+    record_by_evidence: dict[str, dict[str, Any]],
+    query_understanding: dict[str, Any],
+    date: Any,
+) -> set[str]:
+    if query_understanding.get("intent") != "date_activity" or not date:
+        return set()
+    chosen: dict[str, str] = {}
+    for unit, _ in sorted(units, key=lambda item: item[0]["evidence_id"]):
+        record = record_by_evidence.get(unit["evidence_id"])
+        if record is None or date not in _record_dates(record):
+            continue
+        record_type = record.get("record_type")
+        if record_type in {"meeting", "event", "attendance"}:
+            chosen.setdefault(record_type, unit["evidence_id"])
+    return set(chosen.values())
+
+
+def _stable_group_id(kind: str, evidence_ids: list[str]) -> str:
+    signature = kind + "|" + "|".join(sorted(evidence_ids))
+    return "coverage:" + hashlib.sha256(signature.encode("utf-8")).hexdigest()[:16]
+
+
+def _group_coverage(
+    group: dict[str, Any],
+    selected_ids: set[str],
+    excluded: list[dict[str, Any]],
+) -> dict[str, Any]:
+    evidence_ids = sorted(group["evidence_ids"])
+    excluded_ids = sorted(
+        evidence_id
+        for evidence_id in evidence_ids
+        if evidence_id not in selected_ids
+    )
+    return {
+        "coverage_group_id": group["coverage_group_id"],
+        "kind": group["kind"],
+        "evidence_ids": evidence_ids,
+        "selected_evidence_ids": sorted(selected_ids & set(evidence_ids)),
+        "excluded_evidence_ids": excluded_ids,
+        "reason": group["reason"],
+        "complete": not excluded_ids,
+    }

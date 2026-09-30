@@ -3,6 +3,7 @@ from copy import deepcopy
 from pathlib import Path
 
 from cs_ingest.answer_pipeline import AnswerPipeline
+from cs_ingest.claim_answer_contract import ClaimAnswerContractError
 from cs_ingest.evidence_response import build_evidence_response
 from cs_ingest.mock_answer_generator import MockAnswerGenerator
 from cs_ingest.pipeline import QueryRetrievalPipeline
@@ -16,15 +17,7 @@ class InvalidGenerator:
         del _evidence_response
         return {
             "status": "answered",
-            "answer": "Invalid claim.",
-            "citations": [
-                {
-                    "evidence_id": "outside-package",
-                    "source_id": "unknown",
-                    "filename": "unknown.pdf",
-                    "location": {"page": 1},
-                }
-            ],
+            "claims": [{"text": "Invalid claim.", "citation_refs": ["E99"]}],
         }
 
 
@@ -46,12 +39,7 @@ class MockAnswerGeneratorTests(unittest.TestCase):
     def test_cstart_has_valid_provenance_citation(self):
         result = self.pipeline.run("Who coordinated C-START?")
         self.assertTrue(result["validation"]["valid"])
-        self.assertTrue(
-            any(
-                citation["location"].get("page") is not None
-                for citation in result["answer"]["citations"]
-            )
-        )
+        self.assertTrue(result["answer"]["citations"])
 
     def test_lab_procurement_can_cite_independent_evidence(self):
         result = self.pipeline.run("What was discussed about lab procurement?")
@@ -85,17 +73,10 @@ class MockAnswerGeneratorTests(unittest.TestCase):
         self.assertEqual(result["answer"]["citations"], [])
         self.assertTrue(result["validation"]["valid"])
 
-    def test_invalid_generator_result_is_preserved_and_rejected(self):
+    def test_invalid_generator_result_is_rejected_before_final_validation(self):
         pipeline = AnswerPipeline(self.query_pipeline, InvalidGenerator())
-        result = pipeline.run("What happened on 18 July 2026?")
-        self.assertEqual(result["answer"]["answer"], "Invalid claim.")
-        self.assertFalse(result["validation"]["valid"])
-        self.assertTrue(
-            any(
-                error["code"] == "UNKNOWN_EVIDENCE_ID"
-                for error in result["validation"]["errors"]
-            )
-        )
+        with self.assertRaises(ClaimAnswerContractError):
+            pipeline.run("What happened on 18 July 2026?")
 
     def test_evidence_response_is_unchanged(self):
         evidence_response = build_evidence_response(

@@ -28,7 +28,7 @@ class CitationBuilderTests(unittest.TestCase):
         self.assertEqual(list(handles), list(citation_handles(self.response)))
         for ref, evidence in handles.items():
             result = self.builder.build(
-                {"status": "answered", "answer": "Grounded.", "citation_refs": [ref]},
+                {"status": "answered", "claims": [{"text": "Grounded.", "citation_refs": [ref]}]},
                 self.response,
             )
             self.assertEqual(result["citations"][0]["evidence_id"], evidence["evidence_id"])
@@ -36,7 +36,7 @@ class CitationBuilderTests(unittest.TestCase):
     def test_multiple_refs_and_exact_provenance(self):
         handles = citation_handles(self.response)
         result = self.builder.build(
-            {"status": "answered", "answer": "Grounded.", "citation_refs": ["E1", "E2"]},
+            {"status": "answered", "claims": [{"text": "Grounded.", "citation_refs": ["E1", "E2"]}]},
             self.response,
         )
         self.assertEqual(
@@ -76,8 +76,7 @@ class CitationBuilderTests(unittest.TestCase):
         result = self.builder.build(
             {
                 "status": "answered",
-                "answer": "Grounded.",
-                "citation_refs": ["E1", "E2"],
+                "claims": [{"text": "Grounded.", "citation_refs": ["E1", "E2"]}],
             },
             response,
         )
@@ -96,14 +95,14 @@ class CitationBuilderTests(unittest.TestCase):
         for refs in (["E99"], ["E1", "E1"], [1]):
             with self.assertRaises(CitationBuilderError):
                 self.builder.build(
-                    {"status": "answered", "answer": "Grounded.", "citation_refs": refs},
+                    {"status": "answered", "claims": [{"text": "Grounded.", "citation_refs": refs}]},
                     self.response,
                 )
 
     def test_excluded_evidence_cannot_be_referenced(self):
         with self.assertRaises(CitationBuilderError):
             self.builder.build(
-                {"status": "answered", "answer": "Grounded.", "citation_refs": ["E99"]},
+                {"status": "answered", "claims": [{"text": "Grounded.", "citation_refs": ["E99"]}]},
                 self.response,
             )
 
@@ -111,7 +110,7 @@ class CitationBuilderTests(unittest.TestCase):
         for status in ("clarification_required", "insufficient_evidence"):
             self.assertEqual(
                 self.builder.build(
-                    {"status": status, "answer": "", "citation_refs": []},
+                    {"status": status, "claims": []},
                     self.response,
                 ),
                 {"status": status, "answer": "", "citations": []},
@@ -120,7 +119,7 @@ class CitationBuilderTests(unittest.TestCase):
     def test_input_is_immutable_and_final_shape_has_no_internal_field(self):
         before = copy.deepcopy(self.response)
         result = self.builder.build(
-            {"status": "answered", "answer": "Grounded.", "citation_refs": ["E1"]},
+            {"status": "answered", "claims": [{"text": "Grounded.", "citation_refs": ["E1"]}]},
             self.response,
         )
         self.assertEqual(self.response, before)

@@ -1,4 +1,4 @@
-"""Deterministic answer-contract generation from an evidence response."""
+"""Deterministic internal claim generation from an evidence response."""
 
 from __future__ import annotations
 
@@ -20,9 +20,9 @@ class MockAnswerGenerator:
             raise TypeError("evidence_response must be a dictionary")
         status = evidence_response["status"]
         if status == "insufficient_evidence":
-            return {"status": status, "answer": "", "citations": []}
+            return {"status": status, "claims": []}
         if status == "clarification_required":
-            return {"status": status, "answer": "", "citations": []}
+            return {"status": status, "claims": []}
         if status != "answerable":
             raise ValueError(f"Unsupported evidence response status: {status}")
 
@@ -31,14 +31,13 @@ class MockAnswerGenerator:
         independent = _deduplicate(context.get("independent_evidence", []))
         records = context.get("records", [])
 
-        citations = [_citation(evidence) for evidence in supporting]
-        cited_ids = {citation["evidence_id"] for citation in citations}
+        cited_ids = {evidence["evidence_id"] for evidence in supporting}
         independent_only = [
             evidence
             for evidence in independent
             if evidence["evidence_id"] not in cited_ids
         ]
-        citations.extend(_citation(evidence) for evidence in independent_only)
+        selected = supporting + independent_only
 
         lines = [
             "Retrieved records: "
@@ -51,8 +50,12 @@ class MockAnswerGenerator:
             )
         return {
             "status": "answered",
-            "answer": "\n".join(lines),
-            "citations": citations,
+            "claims": [
+                {
+                    "text": "\n".join(lines),
+                    "citation_refs": [f"E{index}" for index in range(1, len(selected) + 1)],
+                }
+            ],
         }
 
 
@@ -70,16 +73,3 @@ def _deduplicate(evidence_units: list[dict[str, Any]]) -> list[dict[str, Any]]:
         unique.setdefault(evidence["evidence_id"], deepcopy(evidence))
     return [unique[evidence_id] for evidence_id in sorted(unique)]
 
-
-def _citation(evidence: dict[str, Any]) -> dict[str, Any]:
-    location = {
-        field: evidence[field]
-        for field in ("page", "sheet", "row", "cell", "cell_range")
-        if field in evidence
-    }
-    return {
-        "evidence_id": evidence["evidence_id"],
-        "source_id": evidence["source_id"],
-        "filename": evidence["filename"],
-        "location": location,
-    }

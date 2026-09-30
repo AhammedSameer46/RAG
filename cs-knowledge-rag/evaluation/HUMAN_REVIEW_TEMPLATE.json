@@ -1,201 +1,224 @@
 {
   "rubric_version": "1.0",
   "source_dataset": "evaluation/sample_questions.json",
+  "review_scope": "12 answerable cases from the latest 17-question Gemma 3 4B evaluation",
+  "review_method": "Assistant-generated evidence-based review synthesis from the latest evaluation output and HUMAN_REVIEW_RUBRIC.md; not an independently performed human annotation.",
+  "review_status": "completed_review_draft",
   "answerable_case_count": 12,
+  "aggregate_review": {
+    "grounded": 7,
+    "partially_grounded": 4,
+    "wrong_citation": 1,
+    "unsupported": 0,
+    "incomplete_flag": 4,
+    "conflict_preservation_failures": 3,
+    "human_review_note": "This draft applies the supplied rubric to the latest evaluation outputs. The five non-grounded answerable cases are E001, E006, E014, E016 and E017."
+  },
   "records": [
     {
       "id": "E001",
       "question": "What happened on 18 July 2026?",
-      "expected_claims": [],
-      "required_evidence_ids": [
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
-        "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
-        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2",
-        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B3",
-        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B4",
-        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B5",
-        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B6",
-        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      "expected_claims": [
+        "C-START occurred on 18 July 2026.",
+        "A department meeting occurred on 18 July 2026.",
+        "Any participation claim must preserve the third-year versus third-and-fourth-year source difference."
       ],
-      "conflict_requirements": [
-        "If participation is mentioned, preserve the differing third-year versus third-and-fourth-year observations."
+      "classification": "PARTIALLY_GROUNDED",
+      "secondary_labels": [
+        "INCOMPLETE"
       ],
-      "acceptable_scope": [
-        "Broad date activity should cover the event and meeting; attendance may be summarized but must use exact spreadsheet headers/cells."
-      ],
-      "review_notes": ""
+      "claim_correct": true,
+      "citation_correct": true,
+      "complete": false,
+      "conflict_preserved": false,
+      "truncation_relevant": true,
+      "review_notes": "Main claims are supported by the selected evidence, but the participant-category discrepancy is compressed and the broad date-query scope is not fully covered; supporting coverage was incomplete."
     },
     {
       "id": "E002",
       "question": "What meetings happened on 18 July 2026?",
-      "expected_claims": [],
-      "required_evidence_ids": [
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
-        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      "expected_claims": [
+        "A Department Meeting occurred on 18 July 2026.",
+        "Chair, attendee count, and the C-START budget decision may be reported when supported by Meeting Log row 2."
       ],
-      "conflict_requirements": [],
-      "acceptable_scope": [
-        "Meeting-focused answer; do not require the same-day event or attendance records."
-      ],
-      "review_notes": ""
+      "classification": "GROUNDED",
+      "secondary_labels": [],
+      "claim_correct": true,
+      "citation_correct": true,
+      "complete": true,
+      "conflict_preserved": true,
+      "truncation_relevant": false,
+      "review_notes": "The latest evaluation found the meeting, chair, attendee count, and budget decision directly supported by Meeting Log row 2; the extra PDF citation was corroborating."
     },
     {
       "id": "E003",
       "question": "Was Dr. Reena Nair present at the meeting on 18 July 2026?",
-      "expected_claims": [],
-      "required_evidence_ids": [
-        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2"
+      "expected_claims": [
+        "Dr. Reena Nair was present at the 18-Jul-2026 Department Meeting."
       ],
-      "conflict_requirements": [],
-      "acceptable_scope": [
-        "Exact person/date attendance lookup."
-      ],
-      "review_notes": ""
+      "classification": "GROUNDED",
+      "secondary_labels": [],
+      "claim_correct": true,
+      "citation_correct": true,
+      "complete": true,
+      "conflict_preserved": true,
+      "truncation_relevant": false,
+      "review_notes": "Faculty Attendance B2 under the 18-Jul-2026 (Dept Mtg) header records Present."
     },
     {
       "id": "E004",
       "question": "When was the faculty meeting rescheduled?",
-      "expected_claims": [],
-      "required_evidence_ids": [
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
-        "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
-        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      "expected_claims": [
+        "The faculty meeting was rescheduled to 25 July 2026.",
+        "The original date was 20 July 2026 if mentioned."
       ],
-      "conflict_requirements": [],
-      "acceptable_scope": [
-        "Notice page is the direct rescheduling source; do not require a fabricated normalized rescheduling record."
-      ],
-      "review_notes": ""
+      "classification": "GROUNDED",
+      "secondary_labels": [],
+      "claim_correct": true,
+      "citation_correct": true,
+      "complete": true,
+      "conflict_preserved": true,
+      "truncation_relevant": false,
+      "review_notes": "The notice PDF directly supports rescheduling from 20 July to 25 July 2026."
     },
     {
       "id": "E005",
       "question": "What was discussed about lab procurement?",
-      "expected_claims": [],
-      "required_evidence_ids": [
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:4",
-        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      "expected_claims": [
+        "Procurement concerned 12 new workstations.",
+        "Final college budget approval was pending.",
+        "Approval was expected by the end of the month."
       ],
-      "conflict_requirements": [],
-      "acceptable_scope": [
-        "Keep spreadsheet meeting-record facts distinct from independently matched PDF text."
-      ],
-      "review_notes": ""
+      "classification": "GROUNDED",
+      "secondary_labels": [],
+      "claim_correct": true,
+      "citation_correct": true,
+      "complete": true,
+      "conflict_preserved": true,
+      "truncation_relevant": false,
+      "review_notes": "The latest evaluation found direct support for the 12 workstations, pending budget approval, and expected end-of-month approval; extra context was not identified as unsupported."
     },
     {
       "id": "E006",
       "question": "Who coordinated C-START?",
-      "expected_claims": [],
-      "required_evidence_ids": [
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
-        "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
-        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      "expected_claims": [
+        "Prof. Sarah Thomas was the C-START event coordinator."
       ],
-      "conflict_requirements": [],
-      "acceptable_scope": [
-        "Claim correctness and citation correctness must be reviewed separately."
-      ],
-      "review_notes": ""
+      "classification": "WRONG_CITATION",
+      "secondary_labels": [],
+      "claim_correct": true,
+      "citation_correct": false,
+      "complete": true,
+      "conflict_preserved": true,
+      "truncation_relevant": true,
+      "review_notes": "The coordinator claim is correct, but the model cited meeting-minutes evidence that establishes Sarah Thomas's involvement rather than the event-report/event-log evidence that directly establishes her coordinator role."
     },
     {
       "id": "E007",
       "question": "What happened on 10 August 2026 regarding the FDP?",
-      "expected_claims": [],
-      "required_evidence_ids": [
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
-        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      "expected_claims": [
+        "An FDP Planning meeting occurred on 10 August 2026.",
+        "Prof. Arun Kumar chaired the meeting.",
+        "FDP resource persons were confirmed."
       ],
-      "conflict_requirements": [],
-      "acceptable_scope": [
-        "Keep the 10 August FDP planning meeting separate from the FDP event record."
-      ],
-      "review_notes": ""
+      "classification": "GROUNDED",
+      "secondary_labels": [],
+      "claim_correct": true,
+      "citation_correct": true,
+      "complete": true,
+      "conflict_preserved": true,
+      "truncation_relevant": false,
+      "review_notes": "Meeting Log row 5 directly supports the 10 August FDP Planning meeting, chair, and confirmation of resource persons; event timing is separately represented in the event log."
     },
     {
       "id": "E013",
       "question": "What decisions were made regarding the FDP?",
-      "expected_claims": [],
-      "required_evidence_ids": [
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
-        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      "expected_claims": [
+        "The FDP schedule was to be finalized at the next meeting on 25 July 2026.",
+        "FDP resource persons were confirmed at the 10 August planning meeting.",
+        "Prof. Arun Kumar may be named where directly supported."
       ],
-      "conflict_requirements": [],
-      "acceptable_scope": [
-        "Review both the 25 July scheduling decision and the 10 August resource-person decision."
-      ],
-      "review_notes": ""
+      "classification": "GROUNDED",
+      "secondary_labels": [],
+      "claim_correct": true,
+      "citation_correct": true,
+      "complete": true,
+      "conflict_preserved": true,
+      "truncation_relevant": false,
+      "review_notes": "The answer covers both the 25 July scheduling decision and the 10 August resource-person decision with direct supporting evidence."
     },
     {
       "id": "E014",
       "question": "What was reported about C-START participation?",
-      "expected_claims": [],
-      "required_evidence_ids": [
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
-        "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
-        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      "expected_claims": [
+        "C-START was held on 18 July 2026.",
+        "45 participants were reported.",
+        "The participant category differs between the event report and meeting minutes."
       ],
-      "conflict_requirements": [
-        "State both participant-category observations or explicitly report the discrepancy."
+      "classification": "PARTIALLY_GROUNDED",
+      "secondary_labels": [
+        "INCOMPLETE"
       ],
-      "acceptable_scope": [
-        "Event participation facts may include count, category, coordinator, keynote, and feedback only when directly supported."
-      ],
-      "review_notes": ""
+      "claim_correct": true,
+      "citation_correct": true,
+      "complete": false,
+      "conflict_preserved": false,
+      "truncation_relevant": true,
+      "review_notes": "The answer's main details are supported, but it reports only the third-year description and omits the event report's third-and-fourth-year observation. The material source discrepancy should have been explicit."
     },
     {
       "id": "E015",
       "question": "What happened on 25 July 2026?",
-      "expected_claims": [],
-      "required_evidence_ids": [
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
-        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C2",
-        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C3",
-        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C4",
-        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C5",
-        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C6",
-        "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
-        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      "expected_claims": [
+        "A Faculty Meeting occurred on 25 July 2026.",
+        "Dr. Reena Nair chaired it and the Meeting Log records five attendees.",
+        "The FDP schedule for August was finalized.",
+        "Any attendance claim must use the 25-Jul-2026 (Faculty Mtg) column and exact cells."
       ],
-      "conflict_requirements": [],
-      "acceptable_scope": [
-        "Verify every attendance claim against the 25-Jul-2026 Faculty Mtg header and exact cell value."
-      ],
-      "review_notes": ""
+      "classification": "GROUNDED",
+      "secondary_labels": [],
+      "claim_correct": true,
+      "citation_correct": true,
+      "complete": true,
+      "conflict_preserved": true,
+      "truncation_relevant": true,
+      "review_notes": "The latest evaluation found the answer supported by Meeting Log row 3 and exact 25 July attendance provenance."
     },
     {
       "id": "E016",
       "question": "What happened on 10 August 2026?",
-      "expected_claims": [],
-      "required_evidence_ids": [
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
-        "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
-        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      "expected_claims": [
+        "An FDP Planning meeting occurred on 10 August 2026.",
+        "The FDP event itself is recorded separately and has status Completed for 10–14 August 2026."
       ],
-      "conflict_requirements": [],
-      "acceptable_scope": [
-        "Distinguish scheduled, planned, and completed; keep the event and planning meeting separate."
+      "classification": "PARTIALLY_GROUNDED",
+      "secondary_labels": [
+        "INCOMPLETE"
       ],
-      "review_notes": ""
+      "claim_correct": false,
+      "citation_correct": true,
+      "complete": false,
+      "conflict_preserved": true,
+      "truncation_relevant": true,
+      "review_notes": "The answer correctly identifies the planning meeting but describes the FDP as planned without clearly distinguishing the event record's Completed status for 10–14 August. This is a temporal/status interpretation issue."
     },
     {
       "id": "E017",
       "question": "How many participants were reported for C-START?",
-      "expected_claims": [],
-      "required_evidence_ids": [
-        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
-        "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
-        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      "expected_claims": [
+        "The reported participant count is 45.",
+        "The sources differ on participant category: third-year only versus third- and fourth-year."
       ],
-      "conflict_requirements": [
-        "Both sources report 45 but differ in participant category; do not silently reconcile them."
+      "classification": "PARTIALLY_GROUNDED",
+      "secondary_labels": [
+        "INCOMPLETE"
       ],
-      "acceptable_scope": [
-        "The numeric answer 45 is necessary; a fully grounded answer also identifies the category discrepancy."
-      ],
-      "review_notes": ""
+      "claim_correct": true,
+      "citation_correct": true,
+      "complete": false,
+      "conflict_preserved": false,
+      "truncation_relevant": true,
+      "review_notes": "The numeric answer 45 is supported by both source observations, but the material participant-category discrepancy is omitted, so the answer is incomplete under the rubric."
     }
   ]
 }

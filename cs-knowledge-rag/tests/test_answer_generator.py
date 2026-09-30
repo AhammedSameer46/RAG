@@ -4,6 +4,7 @@ from pathlib import Path
 
 from cs_ingest.answer_generator import AnswerGenerator
 from cs_ingest.answer_pipeline import AnswerPipeline
+from cs_ingest.claim_answer_contract import ClaimAnswerContractError
 from cs_ingest.mock_answer_generator import MockAnswerGenerator
 from cs_ingest.pipeline import QueryRetrievalPipeline
 
@@ -22,26 +23,14 @@ class RecordingGenerator:
         evidence = evidence_response["answer_context"]["supporting_evidence"][0]
         return {
             "status": "answered",
-            "answer": "Recorded evidence.",
-            "citations": [
-                {
-                    "evidence_id": evidence["evidence_id"],
-                    "source_id": evidence["source_id"],
-                    "filename": evidence["filename"],
-                    "location": {
-                        field: evidence[field]
-                        for field in ("page", "sheet", "row", "cell", "cell_range")
-                        if field in evidence
-                    },
-                }
-            ],
+            "claims": [{"text": "Recorded evidence.", "citation_refs": ["E1"]}],
         }
 
 
 class InvalidGenerator:
     def generate(self, question, evidence_response):
         del question, evidence_response
-        return {"status": "answered", "answer": "Uncited claim.", "citations": []}
+        return {"status": "answered", "claims": [{"text": "Uncited claim.", "citation_refs": []}]}
 
 
 class AnswerGeneratorInterfaceTests(unittest.TestCase):
@@ -76,15 +65,10 @@ class AnswerGeneratorInterfaceTests(unittest.TestCase):
         self.assertEqual(result["answer"]["answer"], "Recorded evidence.")
         self.assertEqual(result["validation"], {"valid": True, "errors": []})
 
-    def test_invalid_custom_generator_output_is_preserved_and_rejected(self):
+    def test_invalid_custom_generator_output_is_rejected_before_final_validation(self):
         pipeline = AnswerPipeline(self.query_pipeline, InvalidGenerator())
-        result = pipeline.run("What happened on 18 July 2026?")
-        self.assertEqual(result["answer"]["answer"], "Uncited claim.")
-        self.assertFalse(result["validation"]["valid"])
-        self.assertIn(
-            "NO_CITATIONS",
-            {error["code"] for error in result["validation"]["errors"]},
-        )
+        with self.assertRaises(ClaimAnswerContractError):
+            pipeline.run("What happened on 18 July 2026?")
 
     def test_clarification_does_not_call_custom_generator(self):
         generator = RecordingGenerator()

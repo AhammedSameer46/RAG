@@ -1,0 +1,2381 @@
+{
+  "run_config": {
+    "model": "gemma3:4b",
+    "base_url": "http://localhost:11434",
+    "timeout": 120.0,
+    "selector": {
+      "max_evidence_units": 3,
+      "max_characters": 12000,
+      "max_records": 8,
+      "max_characters_per_unit": null
+    },
+    "question_count": 17,
+    "attempts_per_question": 1,
+    "retry_policy": "none"
+  },
+  "summary": {
+    "total_questions": 17,
+    "expected_status_matches": 17,
+    "validator_passes": 17,
+    "valid_citation_handles": 12,
+    "model_api_failures": 0,
+    "obligation_pass": 5,
+    "obligation_partial": 3,
+    "obligation_fail": 4,
+    "obligation_na": 5,
+    "wrong_citation_obligations": 1,
+    "conflict_preservation": 9,
+    "lifecycle_distinction": 10,
+    "incomplete_answerable": 7,
+    "average_latency_seconds": 3.8056430705918878,
+    "median_latency_seconds": 4.331023399950936,
+    "maximum_latency_seconds": 13.766401800094172,
+    "truncated_selections": 6
+  },
+  "results": [
+    {
+      "id": "E001",
+      "question": "What happened on 18 July 2026?",
+      "expected_status": "answerable",
+      "actual_status": "answered",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 13.766401800094172,
+      "claim_level_output": {
+        "status": "answered",
+        "claims": [
+          {
+            "text": "On 18 July 2026, the C-START Industry Interaction Programme was held at the department seminar hall.",
+            "citation_refs": [
+              "E2",
+              "E3"
+            ]
+          },
+          {
+            "text": "The C-START Industry Interaction Programme on 18 July 2026 involved 45 third-year students.",
+            "citation_refs": [
+              "E2",
+              "E3"
+            ]
+          },
+          {
+            "text": "Mr. Rajesh Pillai, Chief Technology Officer of Nimbus Technologies, delivered the keynote address at the C-START Industry Interaction Programme on 18 July 2026.",
+            "citation_refs": [
+              "E2"
+            ]
+          }
+        ]
+      },
+      "citation_handle_mapping": {
+        "E1": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+        "E2": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+        "E3": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2"
+      },
+      "selected_evidence": [
+        {
+          "evidence_id": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+          "extracted_text": "Event Report\nC-START \u2014 Industry Interaction Programme\nOn the 18th of July 2026, the Computer Science department organized C-START, an industry\ninteraction programme aimed at connecting final-year and third-year students with the software\nindustry. The event was held at the department seminar hall from 10:00 AM to 1:00 PM.\nChief Guest: Mr. Rajesh Pillai, Chief Technology Officer, Nimbus Technologies. Mr. Pillai delivered the\nkeynote address titled 'What the Industry Really Wants from CS Graduates', followed by a panel\ndiscussion with representatives from two additional companies, Vertex Software and BlueLeaf\nSystems.\nA total of 45 students from the third and fourth year batches participated. The programme concluded\nwith a networking session where students interacted directly with industry representatives. Feedback\ncollected from participants was overwhelmingly positive, with 92% rating the event as 'very useful' for\ncareer preparation.\nThis is the second edition of C-START, following the inaugural programme held in December 2025. The\ndepartment plans to conduct C-START as a recurring annual event.\nReport prepared by: Prof. Sarah Thomas, Event Coordinator\nReport submitted: 22 July 2026\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604",
+          "filename": "CSTART_2026_Event_Report.pdf",
+          "matched_fields": [
+            "record_reference"
+          ]
+        },
+        {
+          "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+          "extracted_text": "Computer Science Department\nMinutes of Department Meeting\nMeeting Date: 18/07/2026\nTime: 3:00 PM - 4:30 PM\nVenue: HOD Chamber\nAttendees: Dr. Reena Nair (HOD), Prof. Sarah Thomas, Prof. Arun Kumar, Prof. Divya Menon, Prof.\nGeorge Mathew\nAgenda\n1. Review of C-START industry interaction programme conducted on 18 July 2026\n2. Faculty development programme (FDP) planning for August\n3. Lab equipment procurement status update\n4. Feedback from third-year student representatives\nDiscussion\nThe department successfully conducted the C-START industry interaction programme on 18 July 2026\nin the seminar hall, in collaboration with three local software companies. Prof. Sarah Thomas reported\nthat 45 third-year students attended, and feedback forms indicated high satisfaction with the panel\ndiscussion format. Mr. Rajesh Pillai, CTO of Nimbus Technologies, delivered the keynote address on\nindustry expectations from CS graduates.\nProf. Arun Kumar raised the topic of the upcoming Faculty Development Programme, proposing the\nweek of 10 August 2026. The committee agreed to finalize the schedule at the next meeting on 25 July\n2026.\nDr. Nair informed the committee that lab equipment procurement (12 new workstations) is pending final\nbudget approval from the college administration, expected by end of month.\nAction Items\nItem\nOwner\nDue Date\nFinalize FDP schedule\nProf. Arun Kumar\n25 Jul 2026\nFollow up on lab equipment budget\nDr. Reena Nair\n31 Jul 2026\nCirculate C-START feedback summary\nProf. Sarah Thomas\n22 Jul 2026\nMeeting concluded at 4:30 PM. Next meeting: 25 July 2026.\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+          "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+          "matched_fields": [
+            "record_reference",
+            "date_mention"
+          ]
+        },
+        {
+          "cell_range": "A:F",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+          "header_context": {
+            "A": "Event Name",
+            "B": "Start Date",
+            "C": "End Date",
+            "D": "Coordinator",
+            "E": "Participants",
+            "F": "Status"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "C-START Industry Interaction",
+            "B": "18-Jul-2026",
+            "C": "18-Jul-2026",
+            "D": "Prof. Sarah Thomas",
+            "E": "45",
+            "F": "Completed"
+          },
+          "row": 2,
+          "sheet": "Events",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "record_reference",
+            "date_mention"
+          ]
+        }
+      ],
+      "selected_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+        "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "excluded_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B3",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B4",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B5",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B6"
+      ],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": false,
+        "independent_coverage_complete": true,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [
+          {
+            "coverage_group_id": "conflict:024a5a9b0dfb0198",
+            "kind": "conflict",
+            "evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "selected_evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "excluded_evidence_ids": [],
+            "reason": "participant observations differ across selected evidence.",
+            "complete": true
+          }
+        ],
+        "coverage_groups": [
+          {
+            "coverage_group_id": "conflict:024a5a9b0dfb0198",
+            "kind": "conflict",
+            "evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "selected_evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "excluded_evidence_ids": [],
+            "reason": "participant observations differ across selected evidence.",
+            "complete": true
+          },
+          {
+            "coverage_group_id": "coverage:9f8609e436e165eb",
+            "kind": "primary_record_types",
+            "evidence_ids": [
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+              "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2"
+            ],
+            "selected_evidence_ids": [
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2"
+            ],
+            "excluded_evidence_ids": [
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+              "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2"
+            ],
+            "reason": "distinct directly relevant record types.",
+            "complete": false
+          }
+        ],
+        "coverage_complete": false
+      },
+      "truncated": true,
+      "final_answer_contract": {
+        "status": "answered",
+        "answer": "On 18 July 2026, the C-START Industry Interaction Programme was held at the department seminar hall.\nThe C-START Industry Interaction Programme on 18 July 2026 involved 45 third-year students.\nMr. Rajesh Pillai, Chief Technology Officer of Nimbus Technologies, delivered the keynote address at the C-START Industry Interaction Programme on 18 July 2026.",
+        "citations": [
+          {
+            "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+            "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+            "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+            "location": {
+              "page": 1
+            }
+          },
+          {
+            "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+            "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+            "filename": "CS_Meetings_Events_Log.xlsx",
+            "location": {
+              "sheet": "Events",
+              "row": 2,
+              "cell_range": "A:F"
+            }
+          }
+        ]
+      },
+      "obligation_evaluation": {
+        "status": "PARTIAL",
+        "required_obligations": [
+          "event_activity",
+          "department_meeting",
+          "participant_conflict"
+        ],
+        "satisfied_obligations": [
+          "event_activity",
+          "participant_conflict"
+        ],
+        "missing_obligations": [
+          "cstart_participant_category",
+          "department_meeting"
+        ],
+        "wrong_citation_obligations": [],
+        "invalid_evidence_handles": [],
+        "conflict_preservation": [
+          {
+            "id": "cstart_participant_category",
+            "satisfied": false,
+            "complete": false,
+            "observations": [
+              {
+                "id": "event_report_participants",
+                "satisfied": false,
+                "wrong_citation": false
+              },
+              {
+                "id": "meeting_minutes_participants",
+                "satisfied": true,
+                "wrong_citation": false
+              }
+            ]
+          }
+        ],
+        "lifecycle_distinction": [],
+        "direct_citation_requirements": [],
+        "acceptable_scope": [
+          "Attendance rows need not be listed individually unless attendance is claimed or the answer asserts complete same-day coverage."
+        ],
+        "incomplete_conditions": [
+          "Missing the meeting or event for a broad date answer.",
+          "Mentioning participation without preserving both participant-category observations."
+        ]
+      },
+      "http_status": 200,
+      "eval_count": 208,
+      "done_reason": "stop"
+    },
+    {
+      "id": "E002",
+      "question": "What meetings happened on 18 July 2026?",
+      "expected_status": "answerable",
+      "actual_status": "answered",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 6.820874199969694,
+      "claim_level_output": {
+        "status": "answered",
+        "claims": [
+          {
+            "text": "A department meeting took place on 18 July 2026",
+            "citation_refs": [
+              "E1",
+              "E2"
+            ]
+          },
+          {
+            "text": "Dr. Reena Nair was the chair of the department meeting on 18 July 2026",
+            "citation_refs": [
+              "E1",
+              "E2"
+            ]
+          },
+          {
+            "text": "The key decision made during the department meeting on 18 July 2026 was approving the C-START programme budget",
+            "citation_refs": [
+              "E1",
+              "E2"
+            ]
+          }
+        ]
+      },
+      "citation_handle_mapping": {
+        "E1": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+        "E2": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      },
+      "selected_evidence": [
+        {
+          "cell_range": "A:E",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+          "header_context": {
+            "A": "Date",
+            "B": "Meeting Type",
+            "C": "Chair",
+            "D": "Attendees Count",
+            "E": "Key Decision"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "18/07/2026",
+            "B": "Department Meeting",
+            "C": "Dr. Reena Nair",
+            "D": "5",
+            "E": "Approved C-START programme budget"
+          },
+          "row": 2,
+          "sheet": "Meeting Log",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "record_reference"
+          ]
+        },
+        {
+          "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+          "extracted_text": "Computer Science Department\nMinutes of Department Meeting\nMeeting Date: 18/07/2026\nTime: 3:00 PM - 4:30 PM\nVenue: HOD Chamber\nAttendees: Dr. Reena Nair (HOD), Prof. Sarah Thomas, Prof. Arun Kumar, Prof. Divya Menon, Prof.\nGeorge Mathew\nAgenda\n1. Review of C-START industry interaction programme conducted on 18 July 2026\n2. Faculty development programme (FDP) planning for August\n3. Lab equipment procurement status update\n4. Feedback from third-year student representatives\nDiscussion\nThe department successfully conducted the C-START industry interaction programme on 18 July 2026\nin the seminar hall, in collaboration with three local software companies. Prof. Sarah Thomas reported\nthat 45 third-year students attended, and feedback forms indicated high satisfaction with the panel\ndiscussion format. Mr. Rajesh Pillai, CTO of Nimbus Technologies, delivered the keynote address on\nindustry expectations from CS graduates.\nProf. Arun Kumar raised the topic of the upcoming Faculty Development Programme, proposing the\nweek of 10 August 2026. The committee agreed to finalize the schedule at the next meeting on 25 July\n2026.\nDr. Nair informed the committee that lab equipment procurement (12 new workstations) is pending final\nbudget approval from the college administration, expected by end of month.\nAction Items\nItem\nOwner\nDue Date\nFinalize FDP schedule\nProf. Arun Kumar\n25 Jul 2026\nFollow up on lab equipment budget\nDr. Reena Nair\n31 Jul 2026\nCirculate C-START feedback summary\nProf. Sarah Thomas\n22 Jul 2026\nMeeting concluded at 4:30 PM. Next meeting: 25 July 2026.\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+          "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+          "matched_fields": [
+            "record_reference"
+          ]
+        }
+      ],
+      "selected_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "excluded_evidence_ids": [],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": true,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [],
+        "coverage_groups": [],
+        "coverage_complete": true
+      },
+      "truncated": false,
+      "final_answer_contract": {
+        "status": "answered",
+        "answer": "A department meeting took place on 18 July 2026\nDr. Reena Nair was the chair of the department meeting on 18 July 2026\nThe key decision made during the department meeting on 18 July 2026 was approving the C-START programme budget",
+        "citations": [
+          {
+            "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2",
+            "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+            "filename": "CS_Meetings_Events_Log.xlsx",
+            "location": {
+              "sheet": "Meeting Log",
+              "row": 2,
+              "cell_range": "A:E"
+            }
+          },
+          {
+            "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+            "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+            "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+            "location": {
+              "page": 1
+            }
+          }
+        ]
+      },
+      "obligation_evaluation": {
+        "status": "PASS",
+        "required_obligations": [
+          "department_meeting"
+        ],
+        "satisfied_obligations": [
+          "department_meeting"
+        ],
+        "missing_obligations": [],
+        "wrong_citation_obligations": [],
+        "invalid_evidence_handles": [],
+        "conflict_preservation": [],
+        "lifecycle_distinction": [],
+        "direct_citation_requirements": [],
+        "acceptable_scope": [
+          "Do not require the same-day event or attendance records."
+        ],
+        "incomplete_conditions": [
+          "No 18 July department meeting is stated."
+        ]
+      },
+      "http_status": 200,
+      "eval_count": 192,
+      "done_reason": "stop"
+    },
+    {
+      "id": "E003",
+      "question": "Was Dr. Reena Nair present at the meeting on 18 July 2026?",
+      "expected_status": "answerable",
+      "actual_status": "answered",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 3.6171668999595568,
+      "claim_level_output": {
+        "status": "answered",
+        "claims": [
+          {
+            "text": "Dr. Reena Nair was present at the meeting on 18 July 2026.",
+            "citation_refs": [
+              "E1"
+            ]
+          }
+        ]
+      },
+      "citation_handle_mapping": {
+        "E1": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2"
+      },
+      "selected_evidence": [
+        {
+          "cell": "B2",
+          "evidence_id": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2",
+          "header_context": {
+            "A": "Faculty Name",
+            "B": "18-Jul-2026 (Dept Mtg)",
+            "C": "25-Jul-2026 (Faculty Mtg)",
+            "D": "02-Aug-2026 (Dept Mtg)"
+          },
+          "kind": "worksheet_cell",
+          "raw_values": {
+            "attendance_value": "Present",
+            "faculty": "Dr. Reena Nair",
+            "meeting_header": "18-Jul-2026 (Dept Mtg)"
+          },
+          "row": 2,
+          "sheet": "Faculty Attendance",
+          "source_id": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35",
+          "filename": "CS_Faculty_Attendance_GoogleSheet.xlsx",
+          "matched_fields": [
+            "record_reference"
+          ]
+        }
+      ],
+      "selected_evidence_ids": [
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2"
+      ],
+      "excluded_evidence_ids": [],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": true,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [],
+        "coverage_groups": [],
+        "coverage_complete": true
+      },
+      "truncated": false,
+      "final_answer_contract": {
+        "status": "answered",
+        "answer": "Dr. Reena Nair was present at the meeting on 18 July 2026.",
+        "citations": [
+          {
+            "evidence_id": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:B2",
+            "source_id": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35",
+            "filename": "CS_Faculty_Attendance_GoogleSheet.xlsx",
+            "location": {
+              "sheet": "Faculty Attendance",
+              "row": 2,
+              "cell": "B2"
+            }
+          }
+        ]
+      },
+      "obligation_evaluation": {
+        "status": "PASS",
+        "required_obligations": [
+          "attendance_present"
+        ],
+        "satisfied_obligations": [
+          "attendance_present"
+        ],
+        "missing_obligations": [],
+        "wrong_citation_obligations": [],
+        "invalid_evidence_handles": [],
+        "conflict_preservation": [],
+        "lifecycle_distinction": [],
+        "direct_citation_requirements": [],
+        "acceptable_scope": [
+          "A concise yes/no answer is sufficient."
+        ],
+        "incomplete_conditions": [
+          "The answer does not establish that Dr. Reena Nair was present."
+        ]
+      },
+      "http_status": 200,
+      "eval_count": 45,
+      "done_reason": "stop"
+    },
+    {
+      "id": "E004",
+      "question": "When was the faculty meeting rescheduled?",
+      "expected_status": "answerable",
+      "actual_status": "answered",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 4.331023399950936,
+      "claim_level_output": {
+        "status": "answered",
+        "claims": [
+          {
+            "text": "The faculty meeting was rescheduled to 25 July 2026",
+            "citation_refs": [
+              "E1",
+              "E2",
+              "E3"
+            ]
+          }
+        ]
+      },
+      "citation_handle_mapping": {
+        "E1": "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+        "E2": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+        "E3": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3"
+      },
+      "selected_evidence": [
+        {
+          "evidence_id": "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+          "extracted_text": "NOTICE\nComputer Science Department\nThis is to inform all faculty members that the Faculty Meeting originally scheduled for 20 July 2026 has\nbeen rescheduled to 25 July 2026 due to the HOD's prior commitment at the university-level review\nboard.\nAll faculty are requested to be present at 2:00 PM on the rescheduled date in the Department\nConference Room. Attendance is mandatory.\nAgenda includes review of the Faculty Development Programme planned for 10 August 2026, and\ndiscussion of the semester examination schedule.\nIssued by: Office of the HOD, Computer Science Department\nNotice circulated on: 19/07/2026\nAttendance Record (to be filled after meeting)\nFaculty Name\nPresent\nRemarks\nDr. Reena Nair\nProf. Sarah Thomas\nProf. Arun Kumar\nProf. Divya Menon\nProf. George Mathew\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456",
+          "filename": "CS_Notice_FacultyMeeting.pdf",
+          "matched_fields": [
+            "keyword",
+            "date_role"
+          ]
+        },
+        {
+          "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+          "extracted_text": "Computer Science Department\nMinutes of Department Meeting\nMeeting Date: 18/07/2026\nTime: 3:00 PM - 4:30 PM\nVenue: HOD Chamber\nAttendees: Dr. Reena Nair (HOD), Prof. Sarah Thomas, Prof. Arun Kumar, Prof. Divya Menon, Prof.\nGeorge Mathew\nAgenda\n1. Review of C-START industry interaction programme conducted on 18 July 2026\n2. Faculty development programme (FDP) planning for August\n3. Lab equipment procurement status update\n4. Feedback from third-year student representatives\nDiscussion\nThe department successfully conducted the C-START industry interaction programme on 18 July 2026\nin the seminar hall, in collaboration with three local software companies. Prof. Sarah Thomas reported\nthat 45 third-year students attended, and feedback forms indicated high satisfaction with the panel\ndiscussion format. Mr. Rajesh Pillai, CTO of Nimbus Technologies, delivered the keynote address on\nindustry expectations from CS graduates.\nProf. Arun Kumar raised the topic of the upcoming Faculty Development Programme, proposing the\nweek of 10 August 2026. The committee agreed to finalize the schedule at the next meeting on 25 July\n2026.\nDr. Nair informed the committee that lab equipment procurement (12 new workstations) is pending final\nbudget approval from the college administration, expected by end of month.\nAction Items\nItem\nOwner\nDue Date\nFinalize FDP schedule\nProf. Arun Kumar\n25 Jul 2026\nFollow up on lab equipment budget\nDr. Reena Nair\n31 Jul 2026\nCirculate C-START feedback summary\nProf. Sarah Thomas\n22 Jul 2026\nMeeting concluded at 4:30 PM. Next meeting: 25 July 2026.\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+          "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+          "matched_fields": [
+            "keyword"
+          ]
+        },
+        {
+          "cell_range": "A:E",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+          "header_context": {
+            "A": "Date",
+            "B": "Meeting Type",
+            "C": "Chair",
+            "D": "Attendees Count",
+            "E": "Key Decision"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "25/07/2026",
+            "B": "Faculty Meeting",
+            "C": "Dr. Reena Nair",
+            "D": "5",
+            "E": "Finalized FDP schedule for August"
+          },
+          "row": 3,
+          "sheet": "Meeting Log",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "keyword"
+          ]
+        }
+      ],
+      "selected_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+        "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "excluded_evidence_ids": [],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": true,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [],
+        "coverage_groups": [],
+        "coverage_complete": true
+      },
+      "truncated": false,
+      "final_answer_contract": {
+        "status": "answered",
+        "answer": "The faculty meeting was rescheduled to 25 July 2026",
+        "citations": [
+          {
+            "evidence_id": "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+            "source_id": "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456",
+            "filename": "CS_Notice_FacultyMeeting.pdf",
+            "location": {
+              "page": 1
+            }
+          },
+          {
+            "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+            "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+            "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+            "location": {
+              "page": 1
+            }
+          },
+          {
+            "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+            "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+            "filename": "CS_Meetings_Events_Log.xlsx",
+            "location": {
+              "sheet": "Meeting Log",
+              "row": 3,
+              "cell_range": "A:E"
+            }
+          }
+        ]
+      },
+      "obligation_evaluation": {
+        "status": "PASS",
+        "required_obligations": [
+          "rescheduled_date"
+        ],
+        "satisfied_obligations": [
+          "rescheduled_date"
+        ],
+        "missing_obligations": [],
+        "wrong_citation_obligations": [],
+        "invalid_evidence_handles": [],
+        "conflict_preservation": [],
+        "lifecycle_distinction": [],
+        "direct_citation_requirements": [],
+        "acceptable_scope": [
+          "The original date need not be stated."
+        ],
+        "incomplete_conditions": [
+          "The rescheduled date is absent or supported only by unrelated evidence."
+        ]
+      },
+      "http_status": 200,
+      "eval_count": 68,
+      "done_reason": "stop"
+    },
+    {
+      "id": "E005",
+      "question": "What was discussed about lab procurement?",
+      "expected_status": "answerable",
+      "actual_status": "answered",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 4.351867399993353,
+      "claim_level_output": {
+        "status": "answered",
+        "claims": [
+          {
+            "text": "The department discussed the status of lab equipment procurement, specifically 12 new workstations, pending final budget approval from the college administration.",
+            "citation_refs": [
+              "E2"
+            ]
+          }
+        ]
+      },
+      "citation_handle_mapping": {
+        "E1": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:4",
+        "E2": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      },
+      "selected_evidence": [
+        {
+          "cell_range": "A:E",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:4",
+          "header_context": {
+            "A": "Date",
+            "B": "Meeting Type",
+            "C": "Chair",
+            "D": "Attendees Count",
+            "E": "Key Decision"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "02/08/2026",
+            "B": "Department Meeting",
+            "C": "Dr. Reena Nair",
+            "D": "4",
+            "E": "Reviewed lab equipment procurement status"
+          },
+          "row": 4,
+          "sheet": "Meeting Log",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "record_reference",
+            "keyword"
+          ]
+        },
+        {
+          "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+          "extracted_text": "Computer Science Department\nMinutes of Department Meeting\nMeeting Date: 18/07/2026\nTime: 3:00 PM - 4:30 PM\nVenue: HOD Chamber\nAttendees: Dr. Reena Nair (HOD), Prof. Sarah Thomas, Prof. Arun Kumar, Prof. Divya Menon, Prof.\nGeorge Mathew\nAgenda\n1. Review of C-START industry interaction programme conducted on 18 July 2026\n2. Faculty development programme (FDP) planning for August\n3. Lab equipment procurement status update\n4. Feedback from third-year student representatives\nDiscussion\nThe department successfully conducted the C-START industry interaction programme on 18 July 2026\nin the seminar hall, in collaboration with three local software companies. Prof. Sarah Thomas reported\nthat 45 third-year students attended, and feedback forms indicated high satisfaction with the panel\ndiscussion format. Mr. Rajesh Pillai, CTO of Nimbus Technologies, delivered the keynote address on\nindustry expectations from CS graduates.\nProf. Arun Kumar raised the topic of the upcoming Faculty Development Programme, proposing the\nweek of 10 August 2026. The committee agreed to finalize the schedule at the next meeting on 25 July\n2026.\nDr. Nair informed the committee that lab equipment procurement (12 new workstations) is pending final\nbudget approval from the college administration, expected by end of month.\nAction Items\nItem\nOwner\nDue Date\nFinalize FDP schedule\nProf. Arun Kumar\n25 Jul 2026\nFollow up on lab equipment budget\nDr. Reena Nair\n31 Jul 2026\nCirculate C-START feedback summary\nProf. Sarah Thomas\n22 Jul 2026\nMeeting concluded at 4:30 PM. Next meeting: 25 July 2026.\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+          "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+          "matched_fields": [
+            "keyword"
+          ]
+        }
+      ],
+      "selected_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:4",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "excluded_evidence_ids": [],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": true,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [],
+        "coverage_groups": [],
+        "coverage_complete": true
+      },
+      "truncated": false,
+      "final_answer_contract": {
+        "status": "answered",
+        "answer": "The department discussed the status of lab equipment procurement, specifically 12 new workstations, pending final budget approval from the college administration.",
+        "citations": [
+          {
+            "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+            "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+            "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+            "location": {
+              "page": 1
+            }
+          }
+        ]
+      },
+      "obligation_evaluation": {
+        "status": "PARTIAL",
+        "required_obligations": [
+          "workstations",
+          "budget_pending"
+        ],
+        "satisfied_obligations": [],
+        "missing_obligations": [],
+        "wrong_citation_obligations": [
+          "budget_pending",
+          "workstations"
+        ],
+        "invalid_evidence_handles": [],
+        "conflict_preservation": [],
+        "lifecycle_distinction": [],
+        "direct_citation_requirements": [],
+        "acceptable_scope": [
+          "The expected approval timing may be omitted if the answer clearly narrows its scope."
+        ],
+        "incomplete_conditions": [
+          "The answer omits both the procurement item and its pending approval status."
+        ]
+      },
+      "http_status": 200,
+      "eval_count": 70,
+      "done_reason": "stop"
+    },
+    {
+      "id": "E006",
+      "question": "Who coordinated C-START?",
+      "expected_status": "answerable",
+      "actual_status": "answered",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 3.9588434000033885,
+      "claim_level_output": {
+        "status": "answered",
+        "claims": [
+          {
+            "text": "Prof. Sarah Thomas coordinated C-START.",
+            "citation_refs": [
+              "E1",
+              "E2",
+              "E3"
+            ]
+          }
+        ]
+      },
+      "citation_handle_mapping": {
+        "E1": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+        "E2": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+        "E3": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2"
+      },
+      "selected_evidence": [
+        {
+          "evidence_id": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+          "extracted_text": "Event Report\nC-START \u2014 Industry Interaction Programme\nOn the 18th of July 2026, the Computer Science department organized C-START, an industry\ninteraction programme aimed at connecting final-year and third-year students with the software\nindustry. The event was held at the department seminar hall from 10:00 AM to 1:00 PM.\nChief Guest: Mr. Rajesh Pillai, Chief Technology Officer, Nimbus Technologies. Mr. Pillai delivered the\nkeynote address titled 'What the Industry Really Wants from CS Graduates', followed by a panel\ndiscussion with representatives from two additional companies, Vertex Software and BlueLeaf\nSystems.\nA total of 45 students from the third and fourth year batches participated. The programme concluded\nwith a networking session where students interacted directly with industry representatives. Feedback\ncollected from participants was overwhelmingly positive, with 92% rating the event as 'very useful' for\ncareer preparation.\nThis is the second edition of C-START, following the inaugural programme held in December 2025. The\ndepartment plans to conduct C-START as a recurring annual event.\nReport prepared by: Prof. Sarah Thomas, Event Coordinator\nReport submitted: 22 July 2026\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604",
+          "filename": "CSTART_2026_Event_Report.pdf",
+          "matched_fields": [
+            "record_reference",
+            "keyword"
+          ]
+        },
+        {
+          "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+          "extracted_text": "Computer Science Department\nMinutes of Department Meeting\nMeeting Date: 18/07/2026\nTime: 3:00 PM - 4:30 PM\nVenue: HOD Chamber\nAttendees: Dr. Reena Nair (HOD), Prof. Sarah Thomas, Prof. Arun Kumar, Prof. Divya Menon, Prof.\nGeorge Mathew\nAgenda\n1. Review of C-START industry interaction programme conducted on 18 July 2026\n2. Faculty development programme (FDP) planning for August\n3. Lab equipment procurement status update\n4. Feedback from third-year student representatives\nDiscussion\nThe department successfully conducted the C-START industry interaction programme on 18 July 2026\nin the seminar hall, in collaboration with three local software companies. Prof. Sarah Thomas reported\nthat 45 third-year students attended, and feedback forms indicated high satisfaction with the panel\ndiscussion format. Mr. Rajesh Pillai, CTO of Nimbus Technologies, delivered the keynote address on\nindustry expectations from CS graduates.\nProf. Arun Kumar raised the topic of the upcoming Faculty Development Programme, proposing the\nweek of 10 August 2026. The committee agreed to finalize the schedule at the next meeting on 25 July\n2026.\nDr. Nair informed the committee that lab equipment procurement (12 new workstations) is pending final\nbudget approval from the college administration, expected by end of month.\nAction Items\nItem\nOwner\nDue Date\nFinalize FDP schedule\nProf. Arun Kumar\n25 Jul 2026\nFollow up on lab equipment budget\nDr. Reena Nair\n31 Jul 2026\nCirculate C-START feedback summary\nProf. Sarah Thomas\n22 Jul 2026\nMeeting concluded at 4:30 PM. Next meeting: 25 July 2026.\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+          "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+          "matched_fields": [
+            "record_reference",
+            "keyword"
+          ]
+        },
+        {
+          "cell_range": "A:F",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+          "header_context": {
+            "A": "Event Name",
+            "B": "Start Date",
+            "C": "End Date",
+            "D": "Coordinator",
+            "E": "Participants",
+            "F": "Status"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "C-START Industry Interaction",
+            "B": "18-Jul-2026",
+            "C": "18-Jul-2026",
+            "D": "Prof. Sarah Thomas",
+            "E": "45",
+            "F": "Completed"
+          },
+          "row": 2,
+          "sheet": "Events",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "record_reference",
+            "keyword"
+          ]
+        }
+      ],
+      "selected_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+        "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "excluded_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:1",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:4",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:5",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2"
+      ],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": false,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [
+          {
+            "coverage_group_id": "conflict:024a5a9b0dfb0198",
+            "kind": "conflict",
+            "evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "selected_evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "excluded_evidence_ids": [],
+            "reason": "participant observations differ across selected evidence.",
+            "complete": true
+          }
+        ],
+        "coverage_groups": [
+          {
+            "coverage_group_id": "conflict:024a5a9b0dfb0198",
+            "kind": "conflict",
+            "evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "selected_evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "excluded_evidence_ids": [],
+            "reason": "participant observations differ across selected evidence.",
+            "complete": true
+          }
+        ],
+        "coverage_complete": true
+      },
+      "truncated": true,
+      "final_answer_contract": {
+        "status": "answered",
+        "answer": "Prof. Sarah Thomas coordinated C-START.",
+        "citations": [
+          {
+            "evidence_id": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+            "source_id": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604",
+            "filename": "CSTART_2026_Event_Report.pdf",
+            "location": {
+              "page": 1
+            }
+          },
+          {
+            "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+            "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+            "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+            "location": {
+              "page": 1
+            }
+          },
+          {
+            "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+            "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+            "filename": "CS_Meetings_Events_Log.xlsx",
+            "location": {
+              "sheet": "Events",
+              "row": 2,
+              "cell_range": "A:F"
+            }
+          }
+        ]
+      },
+      "obligation_evaluation": {
+        "status": "PASS",
+        "required_obligations": [
+          "coordinator"
+        ],
+        "satisfied_obligations": [
+          "coordinator"
+        ],
+        "missing_obligations": [],
+        "wrong_citation_obligations": [],
+        "invalid_evidence_handles": [],
+        "conflict_preservation": [],
+        "lifecycle_distinction": [],
+        "direct_citation_requirements": [
+          {
+            "id": "coordinator",
+            "satisfied": true,
+            "wrong_citation": false
+          }
+        ],
+        "acceptable_scope": [
+          "Only the coordinator needs to be answered."
+        ],
+        "incomplete_conditions": [
+          "Sarah Thomas is absent.",
+          "Sarah Thomas is cited only to meeting minutes that do not identify her as coordinator."
+        ]
+      },
+      "http_status": 200,
+      "eval_count": 41,
+      "done_reason": "stop"
+    },
+    {
+      "id": "E007",
+      "question": "What happened on 10 August 2026 regarding the FDP?",
+      "expected_status": "answerable",
+      "actual_status": "answered",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 4.814828300033696,
+      "claim_level_output": {
+        "status": "answered",
+        "claims": [
+          {
+            "text": "The Faculty Development Programme (FDP) was planned for the week of 10 August 2026 at the department meeting on 25 July 2026",
+            "citation_refs": [
+              "E1",
+              "E3"
+            ]
+          }
+        ]
+      },
+      "citation_handle_mapping": {
+        "E1": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+        "E2": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+        "E3": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3"
+      },
+      "selected_evidence": [
+        {
+          "cell_range": "A:E",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+          "header_context": {
+            "A": "Date",
+            "B": "Meeting Type",
+            "C": "Chair",
+            "D": "Attendees Count",
+            "E": "Key Decision"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "10/08/2026",
+            "B": "FDP Planning",
+            "C": "Prof. Arun Kumar",
+            "D": "6",
+            "E": "Confirmed FDP resource persons"
+          },
+          "row": 5,
+          "sheet": "Meeting Log",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "record_reference",
+            "keyword"
+          ]
+        },
+        {
+          "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+          "extracted_text": "Computer Science Department\nMinutes of Department Meeting\nMeeting Date: 18/07/2026\nTime: 3:00 PM - 4:30 PM\nVenue: HOD Chamber\nAttendees: Dr. Reena Nair (HOD), Prof. Sarah Thomas, Prof. Arun Kumar, Prof. Divya Menon, Prof.\nGeorge Mathew\nAgenda\n1. Review of C-START industry interaction programme conducted on 18 July 2026\n2. Faculty development programme (FDP) planning for August\n3. Lab equipment procurement status update\n4. Feedback from third-year student representatives\nDiscussion\nThe department successfully conducted the C-START industry interaction programme on 18 July 2026\nin the seminar hall, in collaboration with three local software companies. Prof. Sarah Thomas reported\nthat 45 third-year students attended, and feedback forms indicated high satisfaction with the panel\ndiscussion format. Mr. Rajesh Pillai, CTO of Nimbus Technologies, delivered the keynote address on\nindustry expectations from CS graduates.\nProf. Arun Kumar raised the topic of the upcoming Faculty Development Programme, proposing the\nweek of 10 August 2026. The committee agreed to finalize the schedule at the next meeting on 25 July\n2026.\nDr. Nair informed the committee that lab equipment procurement (12 new workstations) is pending final\nbudget approval from the college administration, expected by end of month.\nAction Items\nItem\nOwner\nDue Date\nFinalize FDP schedule\nProf. Arun Kumar\n25 Jul 2026\nFollow up on lab equipment budget\nDr. Reena Nair\n31 Jul 2026\nCirculate C-START feedback summary\nProf. Sarah Thomas\n22 Jul 2026\nMeeting concluded at 4:30 PM. Next meeting: 25 July 2026.\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+          "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+          "matched_fields": [
+            "keyword"
+          ]
+        },
+        {
+          "cell_range": "A:E",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+          "header_context": {
+            "A": "Date",
+            "B": "Meeting Type",
+            "C": "Chair",
+            "D": "Attendees Count",
+            "E": "Key Decision"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "25/07/2026",
+            "B": "Faculty Meeting",
+            "C": "Dr. Reena Nair",
+            "D": "5",
+            "E": "Finalized FDP schedule for August"
+          },
+          "row": 3,
+          "sheet": "Meeting Log",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "keyword"
+          ]
+        }
+      ],
+      "selected_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "excluded_evidence_ids": [],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": true,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [],
+        "coverage_groups": [],
+        "coverage_complete": true
+      },
+      "truncated": false,
+      "final_answer_contract": {
+        "status": "answered",
+        "answer": "The Faculty Development Programme (FDP) was planned for the week of 10 August 2026 at the department meeting on 25 July 2026",
+        "citations": [
+          {
+            "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+            "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+            "filename": "CS_Meetings_Events_Log.xlsx",
+            "location": {
+              "sheet": "Meeting Log",
+              "row": 5,
+              "cell_range": "A:E"
+            }
+          },
+          {
+            "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+            "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+            "filename": "CS_Meetings_Events_Log.xlsx",
+            "location": {
+              "sheet": "Meeting Log",
+              "row": 3,
+              "cell_range": "A:E"
+            }
+          }
+        ]
+      },
+      "obligation_evaluation": {
+        "status": "FAIL",
+        "required_obligations": [
+          "planning_meeting",
+          "completed_fdp"
+        ],
+        "satisfied_obligations": [],
+        "missing_obligations": [
+          "completed_fdp",
+          "fdp_lifecycle",
+          "planning_meeting"
+        ],
+        "wrong_citation_obligations": [],
+        "invalid_evidence_handles": [],
+        "conflict_preservation": [],
+        "lifecycle_distinction": [
+          {
+            "id": "fdp_lifecycle",
+            "satisfied": false,
+            "complete": false,
+            "observations": [
+              {
+                "id": "planning",
+                "satisfied": false,
+                "wrong_citation": false
+              },
+              {
+                "id": "completed",
+                "satisfied": false,
+                "wrong_citation": false
+              }
+            ]
+          }
+        ],
+        "direct_citation_requirements": [],
+        "acceptable_scope": [
+          "The answer may cover only the planning meeting if it explicitly narrows scope to that meeting."
+        ],
+        "incomplete_conditions": [
+          "Planning and completed event observations are merged or one is omitted without scope limitation."
+        ]
+      },
+      "http_status": 200,
+      "eval_count": 86,
+      "done_reason": "stop"
+    },
+    {
+      "id": "E008",
+      "question": "Which meetings did Prof. Sarah Thomas attend?",
+      "expected_status": "clarification_required",
+      "actual_status": "clarification_required",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 0.00010080006904900074,
+      "claim_level_output": null,
+      "citation_handle_mapping": {},
+      "selected_evidence": [],
+      "selected_evidence_ids": [],
+      "excluded_evidence_ids": [],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": true,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [],
+        "coverage_groups": [],
+        "coverage_complete": true
+      },
+      "truncated": false,
+      "final_answer_contract": {
+        "status": "clarification_required",
+        "answer": "",
+        "citations": []
+      },
+      "obligation_evaluation": {
+        "status": "N/A",
+        "reason": "not_applicable"
+      },
+      "http_status": null,
+      "eval_count": null,
+      "done_reason": null
+    },
+    {
+      "id": "E009",
+      "question": "Who attended the C-START event?",
+      "expected_status": "clarification_required",
+      "actual_status": "clarification_required",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 6.809993647038937e-05,
+      "claim_level_output": null,
+      "citation_handle_mapping": {},
+      "selected_evidence": [],
+      "selected_evidence_ids": [],
+      "excluded_evidence_ids": [],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": true,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [],
+        "coverage_groups": [],
+        "coverage_complete": true
+      },
+      "truncated": false,
+      "final_answer_contract": {
+        "status": "clarification_required",
+        "answer": "",
+        "citations": []
+      },
+      "obligation_evaluation": {
+        "status": "N/A",
+        "reason": "not_applicable"
+      },
+      "http_status": null,
+      "eval_count": null,
+      "done_reason": null
+    },
+    {
+      "id": "E010",
+      "question": "What happened on 18 July?",
+      "expected_status": "clarification_required",
+      "actual_status": "clarification_required",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 6.160000339150429e-05,
+      "claim_level_output": null,
+      "citation_handle_mapping": {},
+      "selected_evidence": [],
+      "selected_evidence_ids": [],
+      "excluded_evidence_ids": [],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": true,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [],
+        "coverage_groups": [],
+        "coverage_complete": true
+      },
+      "truncated": false,
+      "final_answer_contract": {
+        "status": "clarification_required",
+        "answer": "",
+        "citations": []
+      },
+      "obligation_evaluation": {
+        "status": "N/A",
+        "reason": "not_applicable"
+      },
+      "http_status": null,
+      "eval_count": null,
+      "done_reason": null
+    },
+    {
+      "id": "E011",
+      "question": "Tell me something about the department.",
+      "expected_status": "clarification_required",
+      "actual_status": "clarification_required",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 0.00010960001964122057,
+      "claim_level_output": null,
+      "citation_handle_mapping": {},
+      "selected_evidence": [],
+      "selected_evidence_ids": [],
+      "excluded_evidence_ids": [],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": true,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [],
+        "coverage_groups": [],
+        "coverage_complete": true
+      },
+      "truncated": false,
+      "final_answer_contract": {
+        "status": "clarification_required",
+        "answer": "",
+        "citations": []
+      },
+      "obligation_evaluation": {
+        "status": "N/A",
+        "reason": "not_applicable"
+      },
+      "http_status": null,
+      "eval_count": null,
+      "done_reason": null
+    },
+    {
+      "id": "E012",
+      "question": "What happened on 10 January 2099?",
+      "expected_status": "insufficient_evidence",
+      "actual_status": "insufficient_evidence",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 0.0001449999399483204,
+      "claim_level_output": null,
+      "citation_handle_mapping": {},
+      "selected_evidence": [],
+      "selected_evidence_ids": [],
+      "excluded_evidence_ids": [],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": true,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [],
+        "coverage_groups": [],
+        "coverage_complete": true
+      },
+      "truncated": false,
+      "final_answer_contract": {
+        "status": "insufficient_evidence",
+        "answer": "",
+        "citations": []
+      },
+      "obligation_evaluation": {
+        "status": "N/A",
+        "reason": "not_applicable"
+      },
+      "http_status": null,
+      "eval_count": null,
+      "done_reason": null
+    },
+    {
+      "id": "E013",
+      "question": "What decisions were made regarding the FDP?",
+      "expected_status": "answerable",
+      "actual_status": "answered",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 5.137442799983546,
+      "claim_level_output": {
+        "status": "answered",
+        "claims": [
+          {
+            "text": "The committee finalized the schedule for the Faculty Development Programme for August 2026.",
+            "citation_refs": [
+              "E3"
+            ]
+          },
+          {
+            "text": "Prof. Arun Kumar confirmed the FDP resource persons at a meeting on August 10, 2026.",
+            "citation_refs": [
+              "E2"
+            ]
+          }
+        ]
+      },
+      "citation_handle_mapping": {
+        "E1": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+        "E2": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+        "E3": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      },
+      "selected_evidence": [
+        {
+          "cell_range": "A:E",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+          "header_context": {
+            "A": "Date",
+            "B": "Meeting Type",
+            "C": "Chair",
+            "D": "Attendees Count",
+            "E": "Key Decision"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "25/07/2026",
+            "B": "Faculty Meeting",
+            "C": "Dr. Reena Nair",
+            "D": "5",
+            "E": "Finalized FDP schedule for August"
+          },
+          "row": 3,
+          "sheet": "Meeting Log",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "record_reference",
+            "keyword"
+          ]
+        },
+        {
+          "cell_range": "A:E",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+          "header_context": {
+            "A": "Date",
+            "B": "Meeting Type",
+            "C": "Chair",
+            "D": "Attendees Count",
+            "E": "Key Decision"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "10/08/2026",
+            "B": "FDP Planning",
+            "C": "Prof. Arun Kumar",
+            "D": "6",
+            "E": "Confirmed FDP resource persons"
+          },
+          "row": 5,
+          "sheet": "Meeting Log",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "record_reference",
+            "keyword"
+          ]
+        },
+        {
+          "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+          "extracted_text": "Computer Science Department\nMinutes of Department Meeting\nMeeting Date: 18/07/2026\nTime: 3:00 PM - 4:30 PM\nVenue: HOD Chamber\nAttendees: Dr. Reena Nair (HOD), Prof. Sarah Thomas, Prof. Arun Kumar, Prof. Divya Menon, Prof.\nGeorge Mathew\nAgenda\n1. Review of C-START industry interaction programme conducted on 18 July 2026\n2. Faculty development programme (FDP) planning for August\n3. Lab equipment procurement status update\n4. Feedback from third-year student representatives\nDiscussion\nThe department successfully conducted the C-START industry interaction programme on 18 July 2026\nin the seminar hall, in collaboration with three local software companies. Prof. Sarah Thomas reported\nthat 45 third-year students attended, and feedback forms indicated high satisfaction with the panel\ndiscussion format. Mr. Rajesh Pillai, CTO of Nimbus Technologies, delivered the keynote address on\nindustry expectations from CS graduates.\nProf. Arun Kumar raised the topic of the upcoming Faculty Development Programme, proposing the\nweek of 10 August 2026. The committee agreed to finalize the schedule at the next meeting on 25 July\n2026.\nDr. Nair informed the committee that lab equipment procurement (12 new workstations) is pending final\nbudget approval from the college administration, expected by end of month.\nAction Items\nItem\nOwner\nDue Date\nFinalize FDP schedule\nProf. Arun Kumar\n25 Jul 2026\nFollow up on lab equipment budget\nDr. Reena Nair\n31 Jul 2026\nCirculate C-START feedback summary\nProf. Sarah Thomas\n22 Jul 2026\nMeeting concluded at 4:30 PM. Next meeting: 25 July 2026.\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+          "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+          "matched_fields": [
+            "keyword"
+          ]
+        }
+      ],
+      "selected_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "excluded_evidence_ids": [],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": true,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [],
+        "coverage_groups": [],
+        "coverage_complete": true
+      },
+      "truncated": false,
+      "final_answer_contract": {
+        "status": "answered",
+        "answer": "The committee finalized the schedule for the Faculty Development Programme for August 2026.\nProf. Arun Kumar confirmed the FDP resource persons at a meeting on August 10, 2026.",
+        "citations": [
+          {
+            "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+            "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+            "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+            "location": {
+              "page": 1
+            }
+          },
+          {
+            "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+            "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+            "filename": "CS_Meetings_Events_Log.xlsx",
+            "location": {
+              "sheet": "Meeting Log",
+              "row": 5,
+              "cell_range": "A:E"
+            }
+          }
+        ]
+      },
+      "obligation_evaluation": {
+        "status": "PARTIAL",
+        "required_obligations": [
+          "schedule_decision",
+          "resource_person_decision"
+        ],
+        "satisfied_obligations": [
+          "resource_person_decision"
+        ],
+        "missing_obligations": [
+          "schedule_decision"
+        ],
+        "wrong_citation_obligations": [],
+        "invalid_evidence_handles": [],
+        "conflict_preservation": [],
+        "lifecycle_distinction": [],
+        "direct_citation_requirements": [],
+        "acceptable_scope": [
+          "A clearly narrowed answer may report one decision only."
+        ],
+        "incomplete_conditions": [
+          "Both decisions are required by the answer scope but only one is reported."
+        ]
+      },
+      "http_status": 200,
+      "eval_count": 110,
+      "done_reason": "stop"
+    },
+    {
+      "id": "E014",
+      "question": "What was reported about C-START participation?",
+      "expected_status": "answerable",
+      "actual_status": "answered",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 4.1852583000436425,
+      "claim_level_output": {
+        "status": "answered",
+        "claims": [
+          {
+            "text": "The C-START Industry Interaction programme took place on 18-Jul-2026.",
+            "citation_refs": [
+              "E2",
+              "E3"
+            ]
+          }
+        ]
+      },
+      "citation_handle_mapping": {
+        "E1": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+        "E2": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+        "E3": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2"
+      },
+      "selected_evidence": [
+        {
+          "evidence_id": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+          "extracted_text": "Event Report\nC-START \u2014 Industry Interaction Programme\nOn the 18th of July 2026, the Computer Science department organized C-START, an industry\ninteraction programme aimed at connecting final-year and third-year students with the software\nindustry. The event was held at the department seminar hall from 10:00 AM to 1:00 PM.\nChief Guest: Mr. Rajesh Pillai, Chief Technology Officer, Nimbus Technologies. Mr. Pillai delivered the\nkeynote address titled 'What the Industry Really Wants from CS Graduates', followed by a panel\ndiscussion with representatives from two additional companies, Vertex Software and BlueLeaf\nSystems.\nA total of 45 students from the third and fourth year batches participated. The programme concluded\nwith a networking session where students interacted directly with industry representatives. Feedback\ncollected from participants was overwhelmingly positive, with 92% rating the event as 'very useful' for\ncareer preparation.\nThis is the second edition of C-START, following the inaugural programme held in December 2025. The\ndepartment plans to conduct C-START as a recurring annual event.\nReport prepared by: Prof. Sarah Thomas, Event Coordinator\nReport submitted: 22 July 2026\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604",
+          "filename": "CSTART_2026_Event_Report.pdf",
+          "matched_fields": [
+            "record_reference",
+            "keyword"
+          ]
+        },
+        {
+          "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+          "extracted_text": "Computer Science Department\nMinutes of Department Meeting\nMeeting Date: 18/07/2026\nTime: 3:00 PM - 4:30 PM\nVenue: HOD Chamber\nAttendees: Dr. Reena Nair (HOD), Prof. Sarah Thomas, Prof. Arun Kumar, Prof. Divya Menon, Prof.\nGeorge Mathew\nAgenda\n1. Review of C-START industry interaction programme conducted on 18 July 2026\n2. Faculty development programme (FDP) planning for August\n3. Lab equipment procurement status update\n4. Feedback from third-year student representatives\nDiscussion\nThe department successfully conducted the C-START industry interaction programme on 18 July 2026\nin the seminar hall, in collaboration with three local software companies. Prof. Sarah Thomas reported\nthat 45 third-year students attended, and feedback forms indicated high satisfaction with the panel\ndiscussion format. Mr. Rajesh Pillai, CTO of Nimbus Technologies, delivered the keynote address on\nindustry expectations from CS graduates.\nProf. Arun Kumar raised the topic of the upcoming Faculty Development Programme, proposing the\nweek of 10 August 2026. The committee agreed to finalize the schedule at the next meeting on 25 July\n2026.\nDr. Nair informed the committee that lab equipment procurement (12 new workstations) is pending final\nbudget approval from the college administration, expected by end of month.\nAction Items\nItem\nOwner\nDue Date\nFinalize FDP schedule\nProf. Arun Kumar\n25 Jul 2026\nFollow up on lab equipment budget\nDr. Reena Nair\n31 Jul 2026\nCirculate C-START feedback summary\nProf. Sarah Thomas\n22 Jul 2026\nMeeting concluded at 4:30 PM. Next meeting: 25 July 2026.\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+          "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+          "matched_fields": [
+            "record_reference",
+            "keyword"
+          ]
+        },
+        {
+          "cell_range": "A:F",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+          "header_context": {
+            "A": "Event Name",
+            "B": "Start Date",
+            "C": "End Date",
+            "D": "Coordinator",
+            "E": "Participants",
+            "F": "Status"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "C-START Industry Interaction",
+            "B": "18-Jul-2026",
+            "C": "18-Jul-2026",
+            "D": "Prof. Sarah Thomas",
+            "E": "45",
+            "F": "Completed"
+          },
+          "row": 2,
+          "sheet": "Events",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "record_reference",
+            "keyword"
+          ]
+        }
+      ],
+      "selected_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+        "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "excluded_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:1",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:4",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:5",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2"
+      ],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": false,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [
+          {
+            "coverage_group_id": "conflict:024a5a9b0dfb0198",
+            "kind": "conflict",
+            "evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "selected_evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "excluded_evidence_ids": [],
+            "reason": "participant observations differ across selected evidence.",
+            "complete": true
+          }
+        ],
+        "coverage_groups": [
+          {
+            "coverage_group_id": "conflict:024a5a9b0dfb0198",
+            "kind": "conflict",
+            "evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "selected_evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "excluded_evidence_ids": [],
+            "reason": "participant observations differ across selected evidence.",
+            "complete": true
+          }
+        ],
+        "coverage_complete": true
+      },
+      "truncated": true,
+      "final_answer_contract": {
+        "status": "answered",
+        "answer": "The C-START Industry Interaction programme took place on 18-Jul-2026.",
+        "citations": [
+          {
+            "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+            "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+            "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+            "location": {
+              "page": 1
+            }
+          },
+          {
+            "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+            "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+            "filename": "CS_Meetings_Events_Log.xlsx",
+            "location": {
+              "sheet": "Events",
+              "row": 2,
+              "cell_range": "A:F"
+            }
+          }
+        ]
+      },
+      "obligation_evaluation": {
+        "status": "FAIL",
+        "required_obligations": [
+          "participant_count"
+        ],
+        "satisfied_obligations": [],
+        "missing_obligations": [
+          "cstart_participant_category",
+          "participant_count"
+        ],
+        "wrong_citation_obligations": [],
+        "invalid_evidence_handles": [],
+        "conflict_preservation": [
+          {
+            "id": "cstart_participant_category",
+            "satisfied": false,
+            "complete": false,
+            "observations": [
+              {
+                "id": "event_report_participants",
+                "satisfied": false,
+                "wrong_citation": false
+              },
+              {
+                "id": "meeting_minutes_participants",
+                "satisfied": false,
+                "wrong_citation": false
+              }
+            ]
+          }
+        ],
+        "lifecycle_distinction": [],
+        "direct_citation_requirements": [],
+        "acceptable_scope": [
+          "The answer may omit unrelated event details, but not the category discrepancy."
+        ],
+        "incomplete_conditions": [
+          "Only one participant observation is stated.",
+          "The count is stated without the differing categories."
+        ]
+      },
+      "http_status": 200,
+      "eval_count": 49,
+      "done_reason": "stop"
+    },
+    {
+      "id": "E015",
+      "question": "What happened on 25 July 2026?",
+      "expected_status": "answerable",
+      "actual_status": "answered",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 4.569906000047922,
+      "claim_level_output": {
+        "status": "answered",
+        "claims": [
+          {
+            "text": "On 25 July 2026, a Faculty Meeting took place.",
+            "citation_refs": [
+              "E1",
+              "E2",
+              "E3"
+            ]
+          }
+        ]
+      },
+      "citation_handle_mapping": {
+        "E1": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+        "E2": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C2",
+        "E3": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C5"
+      },
+      "selected_evidence": [
+        {
+          "cell_range": "A:E",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+          "header_context": {
+            "A": "Date",
+            "B": "Meeting Type",
+            "C": "Chair",
+            "D": "Attendees Count",
+            "E": "Key Decision"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "25/07/2026",
+            "B": "Faculty Meeting",
+            "C": "Dr. Reena Nair",
+            "D": "5",
+            "E": "Finalized FDP schedule for August"
+          },
+          "row": 3,
+          "sheet": "Meeting Log",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "record_reference",
+            "date_mention"
+          ]
+        },
+        {
+          "cell": "C2",
+          "evidence_id": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C2",
+          "header_context": {
+            "A": "Faculty Name",
+            "B": "18-Jul-2026 (Dept Mtg)",
+            "C": "25-Jul-2026 (Faculty Mtg)",
+            "D": "02-Aug-2026 (Dept Mtg)"
+          },
+          "kind": "worksheet_cell",
+          "raw_values": {
+            "attendance_value": "Present",
+            "faculty": "Dr. Reena Nair",
+            "meeting_header": "25-Jul-2026 (Faculty Mtg)"
+          },
+          "row": 2,
+          "sheet": "Faculty Attendance",
+          "source_id": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35",
+          "filename": "CS_Faculty_Attendance_GoogleSheet.xlsx",
+          "matched_fields": [
+            "record_reference"
+          ]
+        },
+        {
+          "cell": "C5",
+          "evidence_id": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C5",
+          "header_context": {
+            "A": "Faculty Name",
+            "B": "18-Jul-2026 (Dept Mtg)",
+            "C": "25-Jul-2026 (Faculty Mtg)",
+            "D": "02-Aug-2026 (Dept Mtg)"
+          },
+          "kind": "worksheet_cell",
+          "raw_values": {
+            "attendance_value": "Present",
+            "faculty": "Prof. Divya Menon",
+            "meeting_header": "25-Jul-2026 (Faculty Mtg)"
+          },
+          "row": 5,
+          "sheet": "Faculty Attendance",
+          "source_id": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35",
+          "filename": "CS_Faculty_Attendance_GoogleSheet.xlsx",
+          "matched_fields": [
+            "record_reference"
+          ]
+        }
+      ],
+      "selected_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C2",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C5"
+      ],
+      "excluded_evidence_ids": [
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C3",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C4",
+        "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C6",
+        "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": false,
+        "independent_coverage_complete": false,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [],
+        "coverage_groups": [
+          {
+            "coverage_group_id": "coverage:daab60819033b76c",
+            "kind": "primary_record_types",
+            "evidence_ids": [
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+              "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C2"
+            ],
+            "selected_evidence_ids": [
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+              "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C2"
+            ],
+            "excluded_evidence_ids": [],
+            "reason": "distinct directly relevant record types.",
+            "complete": true
+          }
+        ],
+        "coverage_complete": true
+      },
+      "truncated": true,
+      "final_answer_contract": {
+        "status": "answered",
+        "answer": "On 25 July 2026, a Faculty Meeting took place.",
+        "citations": [
+          {
+            "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:3",
+            "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+            "filename": "CS_Meetings_Events_Log.xlsx",
+            "location": {
+              "sheet": "Meeting Log",
+              "row": 3,
+              "cell_range": "A:E"
+            }
+          },
+          {
+            "evidence_id": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C2",
+            "source_id": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35",
+            "filename": "CS_Faculty_Attendance_GoogleSheet.xlsx",
+            "location": {
+              "sheet": "Faculty Attendance",
+              "row": 2,
+              "cell": "C2"
+            }
+          },
+          {
+            "evidence_id": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35:sheet:Faculty Attendance:cell:C5",
+            "source_id": "sha256:baa9d6f5734fae547201f0d524282640b752d33d89f237ff13a6e8f77f0fed35",
+            "filename": "CS_Faculty_Attendance_GoogleSheet.xlsx",
+            "location": {
+              "sheet": "Faculty Attendance",
+              "row": 5,
+              "cell": "C5"
+            }
+          }
+        ]
+      },
+      "obligation_evaluation": {
+        "status": "PASS",
+        "required_obligations": [
+          "faculty_meeting"
+        ],
+        "satisfied_obligations": [
+          "faculty_meeting"
+        ],
+        "missing_obligations": [],
+        "wrong_citation_obligations": [],
+        "invalid_evidence_handles": [],
+        "conflict_preservation": [],
+        "lifecycle_distinction": [],
+        "direct_citation_requirements": [],
+        "acceptable_scope": [
+          "Attendance facts are optional unless claimed; if claimed, exact 25 July column evidence is required."
+        ],
+        "incomplete_conditions": [
+          "The faculty meeting or its date is omitted."
+        ]
+      },
+      "http_status": 200,
+      "eval_count": 79,
+      "done_reason": "stop"
+    },
+    {
+      "id": "E016",
+      "question": "What happened on 10 August 2026?",
+      "expected_status": "answerable",
+      "actual_status": "answered",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 4.406434900010936,
+      "claim_level_output": {
+        "status": "answered",
+        "claims": [
+          {
+            "text": "The Faculty Development Programme was planned for 10 August 2026",
+            "citation_refs": [
+              "E3",
+              "E2"
+            ]
+          }
+        ]
+      },
+      "citation_handle_mapping": {
+        "E1": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+        "E2": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+        "E3": "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1"
+      },
+      "selected_evidence": [
+        {
+          "cell_range": "A:F",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+          "header_context": {
+            "A": "Event Name",
+            "B": "Start Date",
+            "C": "End Date",
+            "D": "Coordinator",
+            "E": "Participants",
+            "F": "Status"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "Faculty Development Programme",
+            "B": "10-Aug-2026",
+            "C": "14-Aug-2026",
+            "D": "Prof. Arun Kumar",
+            "E": "12",
+            "F": "Completed"
+          },
+          "row": 3,
+          "sheet": "Events",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "record_reference",
+            "date_mention"
+          ]
+        },
+        {
+          "cell_range": "A:E",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+          "header_context": {
+            "A": "Date",
+            "B": "Meeting Type",
+            "C": "Chair",
+            "D": "Attendees Count",
+            "E": "Key Decision"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "10/08/2026",
+            "B": "FDP Planning",
+            "C": "Prof. Arun Kumar",
+            "D": "6",
+            "E": "Confirmed FDP resource persons"
+          },
+          "row": 5,
+          "sheet": "Meeting Log",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "record_reference",
+            "date_mention"
+          ]
+        },
+        {
+          "evidence_id": "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+          "extracted_text": "NOTICE\nComputer Science Department\nThis is to inform all faculty members that the Faculty Meeting originally scheduled for 20 July 2026 has\nbeen rescheduled to 25 July 2026 due to the HOD's prior commitment at the university-level review\nboard.\nAll faculty are requested to be present at 2:00 PM on the rescheduled date in the Department\nConference Room. Attendance is mandatory.\nAgenda includes review of the Faculty Development Programme planned for 10 August 2026, and\ndiscussion of the semester examination schedule.\nIssued by: Office of the HOD, Computer Science Department\nNotice circulated on: 19/07/2026\nAttendance Record (to be filled after meeting)\nFaculty Name\nPresent\nRemarks\nDr. Reena Nair\nProf. Sarah Thomas\nProf. Arun Kumar\nProf. Divya Menon\nProf. George Mathew\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456",
+          "filename": "CS_Notice_FacultyMeeting.pdf",
+          "matched_fields": [
+            "date_mention"
+          ]
+        }
+      ],
+      "selected_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+        "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1"
+      ],
+      "excluded_evidence_ids": [
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": false,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [],
+        "coverage_groups": [
+          {
+            "coverage_group_id": "coverage:561436382443de26",
+            "kind": "lifecycle",
+            "evidence_ids": [
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5"
+            ],
+            "selected_evidence_ids": [
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5"
+            ],
+            "excluded_evidence_ids": [],
+            "reason": "records describe related lifecycle stages.",
+            "complete": true
+          },
+          {
+            "coverage_group_id": "coverage:95e01d67bf44d5e4",
+            "kind": "primary_record_types",
+            "evidence_ids": [
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5"
+            ],
+            "selected_evidence_ids": [
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+              "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5"
+            ],
+            "excluded_evidence_ids": [],
+            "reason": "distinct directly relevant record types.",
+            "complete": true
+          }
+        ],
+        "coverage_complete": true
+      },
+      "truncated": true,
+      "final_answer_contract": {
+        "status": "answered",
+        "answer": "The Faculty Development Programme was planned for 10 August 2026",
+        "citations": [
+          {
+            "evidence_id": "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456:pdf-page:1",
+            "source_id": "sha256:d30e1dca7e0cc5b51844c40ef462a33fe1cceb66bfd29acb899f7150f11b0456",
+            "filename": "CS_Notice_FacultyMeeting.pdf",
+            "location": {
+              "page": 1
+            }
+          },
+          {
+            "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:5",
+            "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+            "filename": "CS_Meetings_Events_Log.xlsx",
+            "location": {
+              "sheet": "Meeting Log",
+              "row": 5,
+              "cell_range": "A:E"
+            }
+          }
+        ]
+      },
+      "obligation_evaluation": {
+        "status": "FAIL",
+        "required_obligations": [
+          "planning_meeting",
+          "completed_event"
+        ],
+        "satisfied_obligations": [],
+        "missing_obligations": [
+          "completed_event",
+          "fdp_planning_vs_completed",
+          "planning_meeting"
+        ],
+        "wrong_citation_obligations": [],
+        "invalid_evidence_handles": [],
+        "conflict_preservation": [],
+        "lifecycle_distinction": [
+          {
+            "id": "fdp_planning_vs_completed",
+            "satisfied": false,
+            "complete": false,
+            "observations": [
+              {
+                "id": "planning",
+                "satisfied": false,
+                "wrong_citation": false
+              },
+              {
+                "id": "completed",
+                "satisfied": false,
+                "wrong_citation": false
+              }
+            ]
+          }
+        ],
+        "direct_citation_requirements": [],
+        "acceptable_scope": [
+          "A narrowly scoped answer must identify that it is discussing only the planning meeting or only the completed event."
+        ],
+        "incomplete_conditions": [
+          "Planning is presented as completion or completion is presented as planning.",
+          "One lifecycle observation is silently omitted."
+        ]
+      },
+      "http_status": 200,
+      "eval_count": 65,
+      "done_reason": "stop"
+    },
+    {
+      "id": "E017",
+      "question": "How many participants were reported for C-START?",
+      "expected_status": "answerable",
+      "actual_status": "answered",
+      "validator": {
+        "valid": true,
+        "errors": []
+      },
+      "model_api_failure": null,
+      "latency_seconds": 4.735399700002745,
+      "claim_level_output": {
+        "status": "answered",
+        "claims": [
+          {
+            "text": "Forty-five third-year students and fourth-year students participated in C-START.",
+            "citation_refs": [
+              "E2",
+              "E3"
+            ]
+          }
+        ]
+      },
+      "citation_handle_mapping": {
+        "E1": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+        "E2": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+        "E3": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2"
+      },
+      "selected_evidence": [
+        {
+          "evidence_id": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+          "extracted_text": "Event Report\nC-START \u2014 Industry Interaction Programme\nOn the 18th of July 2026, the Computer Science department organized C-START, an industry\ninteraction programme aimed at connecting final-year and third-year students with the software\nindustry. The event was held at the department seminar hall from 10:00 AM to 1:00 PM.\nChief Guest: Mr. Rajesh Pillai, Chief Technology Officer, Nimbus Technologies. Mr. Pillai delivered the\nkeynote address titled 'What the Industry Really Wants from CS Graduates', followed by a panel\ndiscussion with representatives from two additional companies, Vertex Software and BlueLeaf\nSystems.\nA total of 45 students from the third and fourth year batches participated. The programme concluded\nwith a networking session where students interacted directly with industry representatives. Feedback\ncollected from participants was overwhelmingly positive, with 92% rating the event as 'very useful' for\ncareer preparation.\nThis is the second edition of C-START, following the inaugural programme held in December 2025. The\ndepartment plans to conduct C-START as a recurring annual event.\nReport prepared by: Prof. Sarah Thomas, Event Coordinator\nReport submitted: 22 July 2026\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604",
+          "filename": "CSTART_2026_Event_Report.pdf",
+          "matched_fields": [
+            "record_reference",
+            "keyword"
+          ]
+        },
+        {
+          "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+          "extracted_text": "Computer Science Department\nMinutes of Department Meeting\nMeeting Date: 18/07/2026\nTime: 3:00 PM - 4:30 PM\nVenue: HOD Chamber\nAttendees: Dr. Reena Nair (HOD), Prof. Sarah Thomas, Prof. Arun Kumar, Prof. Divya Menon, Prof.\nGeorge Mathew\nAgenda\n1. Review of C-START industry interaction programme conducted on 18 July 2026\n2. Faculty development programme (FDP) planning for August\n3. Lab equipment procurement status update\n4. Feedback from third-year student representatives\nDiscussion\nThe department successfully conducted the C-START industry interaction programme on 18 July 2026\nin the seminar hall, in collaboration with three local software companies. Prof. Sarah Thomas reported\nthat 45 third-year students attended, and feedback forms indicated high satisfaction with the panel\ndiscussion format. Mr. Rajesh Pillai, CTO of Nimbus Technologies, delivered the keynote address on\nindustry expectations from CS graduates.\nProf. Arun Kumar raised the topic of the upcoming Faculty Development Programme, proposing the\nweek of 10 August 2026. The committee agreed to finalize the schedule at the next meeting on 25 July\n2026.\nDr. Nair informed the committee that lab equipment procurement (12 new workstations) is pending final\nbudget approval from the college administration, expected by end of month.\nAction Items\nItem\nOwner\nDue Date\nFinalize FDP schedule\nProf. Arun Kumar\n25 Jul 2026\nFollow up on lab equipment budget\nDr. Reena Nair\n31 Jul 2026\nCirculate C-START feedback summary\nProf. Sarah Thomas\n22 Jul 2026\nMeeting concluded at 4:30 PM. Next meeting: 25 July 2026.\n",
+          "kind": "pdf_page",
+          "page": 1,
+          "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+          "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+          "matched_fields": [
+            "record_reference",
+            "keyword"
+          ]
+        },
+        {
+          "cell_range": "A:F",
+          "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+          "header_context": {
+            "A": "Event Name",
+            "B": "Start Date",
+            "C": "End Date",
+            "D": "Coordinator",
+            "E": "Participants",
+            "F": "Status"
+          },
+          "kind": "worksheet_row",
+          "raw_values": {
+            "A": "C-START Industry Interaction",
+            "B": "18-Jul-2026",
+            "C": "18-Jul-2026",
+            "D": "Prof. Sarah Thomas",
+            "E": "45",
+            "F": "Completed"
+          },
+          "row": 2,
+          "sheet": "Events",
+          "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+          "filename": "CS_Meetings_Events_Log.xlsx",
+          "matched_fields": [
+            "record_reference",
+            "keyword"
+          ]
+        }
+      ],
+      "selected_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+        "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+        "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+      ],
+      "excluded_evidence_ids": [
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:1",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:3",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:4",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:5",
+        "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Meeting Log:row:2"
+      ],
+      "selector_coverage": {
+        "record_coverage_complete": true,
+        "supporting_coverage_complete": true,
+        "independent_coverage_complete": false,
+        "conflict_coverage_complete": true,
+        "conflict_groups": [
+          {
+            "coverage_group_id": "conflict:024a5a9b0dfb0198",
+            "kind": "conflict",
+            "evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "selected_evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "excluded_evidence_ids": [],
+            "reason": "participant observations differ across selected evidence.",
+            "complete": true
+          }
+        ],
+        "coverage_groups": [
+          {
+            "coverage_group_id": "conflict:024a5a9b0dfb0198",
+            "kind": "conflict",
+            "evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "selected_evidence_ids": [
+              "sha256:ac8417244848ef99ee602bc6acb233dd7eb5303d186870467f2e796cb4907604:pdf-page:1",
+              "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1"
+            ],
+            "excluded_evidence_ids": [],
+            "reason": "participant observations differ across selected evidence.",
+            "complete": true
+          }
+        ],
+        "coverage_complete": true
+      },
+      "truncated": true,
+      "final_answer_contract": {
+        "status": "answered",
+        "answer": "Forty-five third-year students and fourth-year students participated in C-START.",
+        "citations": [
+          {
+            "evidence_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a:pdf-page:1",
+            "source_id": "sha256:f91a35b72d48ba190bf53134fe758ec83f4daf55846e7b1dd1ea86ad32e07b8a",
+            "filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf",
+            "location": {
+              "page": 1
+            }
+          },
+          {
+            "evidence_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50:sheet:Events:row:2",
+            "source_id": "sha256:a5940c52f86718b17baded15e84f10cd2388a4b7026c95570f32a3c642703c50",
+            "filename": "CS_Meetings_Events_Log.xlsx",
+            "location": {
+              "sheet": "Events",
+              "row": 2,
+              "cell_range": "A:F"
+            }
+          }
+        ]
+      },
+      "obligation_evaluation": {
+        "status": "FAIL",
+        "required_obligations": [
+          "reported_count"
+        ],
+        "satisfied_obligations": [],
+        "missing_obligations": [
+          "participant_category_discrepancy",
+          "reported_count"
+        ],
+        "wrong_citation_obligations": [],
+        "invalid_evidence_handles": [],
+        "conflict_preservation": [
+          {
+            "id": "participant_category_discrepancy",
+            "satisfied": false,
+            "complete": false,
+            "observations": [
+              {
+                "id": "event_report_category",
+                "satisfied": false,
+                "wrong_citation": false
+              },
+              {
+                "id": "meeting_minutes_category",
+                "satisfied": false,
+                "wrong_citation": false
+              }
+            ]
+          }
+        ],
+        "lifecycle_distinction": [],
+        "direct_citation_requirements": [],
+        "acceptable_scope": [
+          "The numeric answer may be concise, but a fully grounded answer must preserve the category discrepancy."
+        ],
+        "incomplete_conditions": [
+          "Only the number 45 is returned without the two category observations."
+        ]
+      },
+      "http_status": 200,
+      "eval_count": 74,
+      "done_reason": "stop"
+    }
+  ]
+}

@@ -59,8 +59,7 @@ class OllamaAnswerPipelineIntegrationTests(unittest.TestCase):
     def _answerable_answer(self, evidence_response):
         return {
             "status": "answered",
-            "answer": "The retrieved evidence identifies the coordinator.",
-            "citation_refs": ["E1"],
+            "claims": [{"text": "The retrieved evidence identifies the coordinator.", "citation_refs": ["E1"]}],
         }
 
     def test_answerable_question_uses_real_pipeline_and_validates(self):
@@ -110,8 +109,7 @@ class OllamaAnswerPipelineIntegrationTests(unittest.TestCase):
     def test_invalid_citation_is_preserved_and_rejected(self):
         invalid_answer = {
             "status": "answered",
-            "answer": "Unsupported citation.",
-            "citation_refs": ["E99"],
+            "claims": [{"text": "Unsupported citation.", "citation_refs": ["E99"]}],
         }
         pipeline = AnswerPipeline(
             self.query_pipeline,

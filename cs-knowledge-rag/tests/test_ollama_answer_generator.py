@@ -60,7 +60,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
         return json.dumps({"response": json.dumps(answer)}).encode("utf-8")
 
     def test_answerable_request_sends_question_and_structured_evidence(self):
-        answer = {"status": "answered", "answer": "Evidence.", "citation_refs": ["E1"]}
+        answer = {"status": "answered", "claims": [{"text": "Evidence.", "citation_refs": ["E1"]}]}
         response = FakeHTTPResponse(self._model_payload(answer))
         with patch(
             "cs_ingest.ollama_answer_generator.request.urlopen",
@@ -92,7 +92,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
         for field in (
             "status",
             "answer",
-            "citation_refs",
+            "claims",
         ):
             self.assertIn(field, _SYSTEM_PROMPT)
         self.assertIn("Never output source IDs, evidence IDs, filenames, or locations.", _SYSTEM_PROMPT)
@@ -124,16 +124,16 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
             insufficient = generator.generate("Question", self.insufficient_response)
         self.assertEqual(
             clarification,
-            {"status": "clarification_required", "answer": "", "citation_refs": []},
+            {"status": "clarification_required", "claims": []},
         )
         self.assertEqual(
             insufficient,
-            {"status": "insufficient_evidence", "answer": "", "citation_refs": []},
+            {"status": "insufficient_evidence", "claims": []},
         )
         urlopen.assert_not_called()
 
     def test_valid_json_response_is_parsed(self):
-        answer = {"status": "answered", "answer": "Evidence.", "citation_refs": ["E1"]}
+        answer = {"status": "answered", "claims": [{"text": "Evidence.", "citation_refs": ["E1"]}]}
         with patch(
             "cs_ingest.ollama_answer_generator.request.urlopen",
             return_value=FakeHTTPResponse(self._model_payload(answer)),
@@ -146,8 +146,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
     def test_valid_provider_result_passes_answer_contract(self):
         answer = {
             "status": "answered",
-            "answer": "The retrieved record contains the coordination detail.",
-            "citation_refs": ["E1"],
+            "claims": [{"text": "The retrieved record contains the coordination detail.", "citation_refs": ["E1"]}],
         }
         with patch(
             "cs_ingest.ollama_answer_generator.request.urlopen",
@@ -183,7 +182,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
 
     def test_unsupported_status_raises_response_error(self):
         payload = self._model_payload(
-            {"status": "unknown", "answer": "No", "citation_refs": []}
+            {"status": "unknown", "claims": []}
         )
         with patch(
             "cs_ingest.ollama_answer_generator.request.urlopen",
@@ -219,7 +218,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
 
     def test_evidence_response_is_not_mutated(self):
         snapshot = deepcopy(self.evidence_response)
-        answer = {"status": "answered", "answer": "Evidence.", "citation_refs": ["E1"]}
+        answer = {"status": "answered", "claims": [{"text": "Evidence.", "citation_refs": ["E1"]}]}
         with patch(
             "cs_ingest.ollama_answer_generator.request.urlopen",
             return_value=FakeHTTPResponse(self._model_payload(answer)),
@@ -230,8 +229,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
     def test_invalid_citations_pass_through_for_contract_validation(self):
         answer = {
             "status": "answered",
-            "answer": "Unsupported citation.",
-            "citation_refs": ["sha256:not-retrieved"],
+            "claims": [{"text": "Unsupported citation.", "citation_refs": ["sha256:not-retrieved"]}],
         }
         with patch(
             "cs_ingest.ollama_answer_generator.request.urlopen",
@@ -242,7 +240,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
             )
         validation = validate_answer(result, self.evidence_response)
         self.assertFalse(validation["valid"])
-        self.assertEqual(result["citation_refs"], ["sha256:not-retrieved"])
+        self.assertEqual(result["claims"][0]["citation_refs"], ["sha256:not-retrieved"])
 
     def test_unknown_evidence_status_fails_before_http(self):
         with patch("cs_ingest.ollama_answer_generator.request.urlopen") as urlopen:

@@ -10,6 +10,7 @@ from typing import Any
 from .answer_generator import AnswerGenerator
 from .answer_contract import validate_answer
 from .citation_builder import CitationBuilder
+from .claim_answer_contract import validate_claim_answer
 from .evidence_response import build_evidence_response
 from .evidence_selector import EvidenceSelectionConfig, EvidenceSelector
 from .mock_answer_generator import MockAnswerGenerator
@@ -80,10 +81,8 @@ class AnswerPipeline:
             answer = _generate(
                 self.answer_generator, question, generator_evidence_response
             )
-            if "citation_refs" in answer:
-                answer = self.citation_builder.build(
-                    answer, generator_evidence_response
-                )
+            validate_claim_answer(answer, generator_evidence_response)
+            answer = self.citation_builder.build(answer, generator_evidence_response)
         validation = validate_answer(answer, generator_evidence_response)
         return {
             "question": question,

@@ -1,0 +1,204 @@
+{
+  "schema_version": "1.0",
+  "description": "Deterministic answer-level obligations for the 12 answerable evaluation questions.",
+  "matching": {
+    "phrase_matching": "case_insensitive_explicit_phrases",
+    "evidence_matching": "exact_structured_provenance",
+    "semantic_inference": false,
+    "llm_judge": false
+  },
+  "obligations": [
+    {
+      "id": "E001",
+      "question": "What happened on 18 July 2026?",
+      "required_observations": [
+        {"id": "event_activity", "all_phrases": ["C-START", "18 July 2026"]},
+        {"id": "department_meeting", "any_phrases": ["department meeting", "meeting"], "all_phrases": ["18 July 2026"]},
+        {"id": "participant_conflict", "conflict_id": "cstart_participant_category"}
+      ],
+      "required_evidence_relationships": [
+        {"observation_id": "event_activity", "required_evidence": [{"filename": "CSTART_2026_Event_Report.pdf", "location": {"page": 1}}, {"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Events", "row": 2}}]},
+        {"observation_id": "department_meeting", "required_evidence": [{"filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf", "location": {"page": 1}}, {"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Meeting Log", "row": 2}}]}
+      ],
+      "conflict_requirements": [
+        {"id": "cstart_participant_category", "observations": [
+          {"id": "event_report_participants", "all_phrases": ["45", "third", "fourth"], "required_evidence": [{"filename": "CSTART_2026_Event_Report.pdf", "location": {"page": 1}}]},
+          {"id": "meeting_minutes_participants", "all_phrases": ["45", "third-year"], "required_evidence": [{"filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf", "location": {"page": 1}}]}
+        ]}
+      ],
+      "lifecycle_requirements": [],
+      "direct_citation_requirements": [],
+      "acceptable_scope": ["Attendance rows need not be listed individually unless attendance is claimed or the answer asserts complete same-day coverage."],
+      "incomplete_conditions": ["Missing the meeting or event for a broad date answer.", "Mentioning participation without preserving both participant-category observations."]
+    },
+    {
+      "id": "E002",
+      "question": "What meetings happened on 18 July 2026?",
+      "required_observations": [
+        {"id": "department_meeting", "any_phrases": ["department meeting", "meeting"], "all_phrases": ["18 July 2026"], "required_evidence": [{"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Meeting Log", "row": 2}}]}
+      ],
+      "required_evidence_relationships": [],
+      "conflict_requirements": [],
+      "lifecycle_requirements": [],
+      "direct_citation_requirements": [],
+      "acceptable_scope": ["Do not require the same-day event or attendance records."],
+      "incomplete_conditions": ["No 18 July department meeting is stated."]
+    },
+    {
+      "id": "E003",
+      "question": "Was Dr. Reena Nair present at the meeting on 18 July 2026?",
+      "required_observations": [
+        {"id": "attendance_present", "all_phrases": ["reena nair", "present"], "required_evidence": [{"filename": "CS_Faculty_Attendance_GoogleSheet.xlsx", "location": {"sheet": "Faculty Attendance", "cell": "B2"}}]}
+      ],
+      "required_evidence_relationships": [],
+      "conflict_requirements": [],
+      "lifecycle_requirements": [],
+      "direct_citation_requirements": [],
+      "acceptable_scope": ["A concise yes/no answer is sufficient."],
+      "incomplete_conditions": ["The answer does not establish that Dr. Reena Nair was present."]
+    },
+    {
+      "id": "E004",
+      "question": "When was the faculty meeting rescheduled?",
+      "required_observations": [
+        {"id": "rescheduled_date", "all_phrases": ["25 July 2026"], "required_evidence": [{"filename": "CS_Notice_FacultyMeeting.pdf", "location": {"page": 1}}]}
+      ],
+      "required_evidence_relationships": [],
+      "conflict_requirements": [],
+      "lifecycle_requirements": [],
+      "direct_citation_requirements": [],
+      "acceptable_scope": ["The original date need not be stated."],
+      "incomplete_conditions": ["The rescheduled date is absent or supported only by unrelated evidence."]
+    },
+    {
+      "id": "E005",
+      "question": "What was discussed about lab procurement?",
+      "required_observations": [
+        {"id": "workstations", "all_phrases": ["12", "workstations"], "required_evidence": [{"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Meeting Log", "row": 4}}]},
+        {"id": "budget_pending", "any_phrases": ["pending", "approval"], "all_phrases": ["budget"], "required_evidence": [{"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Meeting Log", "row": 4}}]}
+      ],
+      "required_evidence_relationships": [],
+      "conflict_requirements": [],
+      "lifecycle_requirements": [],
+      "direct_citation_requirements": [],
+      "acceptable_scope": ["The expected approval timing may be omitted if the answer clearly narrows its scope."],
+      "incomplete_conditions": ["The answer omits both the procurement item and its pending approval status."]
+    },
+    {
+      "id": "E006",
+      "question": "Who coordinated C-START?",
+      "required_observations": [
+        {"id": "coordinator", "all_phrases": ["sarah thomas"], "required_evidence": [{"filename": "CSTART_2026_Event_Report.pdf", "location": {"page": 1}}]}
+      ],
+      "required_evidence_relationships": [],
+      "conflict_requirements": [],
+      "lifecycle_requirements": [],
+      "direct_citation_requirements": [
+        {"observation_id": "coordinator", "required_evidence": [{"filename": "CSTART_2026_Event_Report.pdf", "location": {"page": 1}}]}
+      ],
+      "acceptable_scope": ["Only the coordinator needs to be answered."],
+      "incomplete_conditions": ["Sarah Thomas is absent.", "Sarah Thomas is cited only to meeting minutes that do not identify her as coordinator."]
+    },
+    {
+      "id": "E007",
+      "question": "What happened on 10 August 2026 regarding the FDP?",
+      "required_observations": [
+        {"id": "planning_meeting", "all_phrases": ["planning", "10 August 2026"], "required_evidence": [{"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Meeting Log", "row": 5}}]},
+        {"id": "completed_fdp", "all_phrases": ["completed", "10", "14 August"], "required_evidence": [{"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Events", "row": 3}}]}
+      ],
+      "required_evidence_relationships": [],
+      "conflict_requirements": [],
+      "lifecycle_requirements": [
+        {"id": "fdp_lifecycle", "observations": [
+          {"id": "planning", "all_phrases": ["planning"], "required_evidence": [{"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Meeting Log", "row": 5}}]},
+          {"id": "completed", "all_phrases": ["completed"], "required_evidence": [{"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Events", "row": 3}}]}
+        ]}
+      ],
+      "direct_citation_requirements": [],
+      "acceptable_scope": ["The answer may cover only the planning meeting if it explicitly narrows scope to that meeting."],
+      "incomplete_conditions": ["Planning and completed event observations are merged or one is omitted without scope limitation."]
+    },
+    {
+      "id": "E013",
+      "question": "What decisions were made regarding the FDP?",
+      "required_observations": [
+        {"id": "schedule_decision", "all_phrases": ["25 July 2026", "schedule"], "required_evidence": [{"filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf", "location": {"page": 1}}]},
+        {"id": "resource_person_decision", "all_phrases": ["resource persons"], "required_evidence": [{"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Meeting Log", "row": 5}}]}
+      ],
+      "required_evidence_relationships": [],
+      "conflict_requirements": [],
+      "lifecycle_requirements": [],
+      "direct_citation_requirements": [],
+      "acceptable_scope": ["A clearly narrowed answer may report one decision only."],
+      "incomplete_conditions": ["Both decisions are required by the answer scope but only one is reported."]
+    },
+    {
+      "id": "E014",
+      "question": "What was reported about C-START participation?",
+      "required_observations": [
+        {"id": "participant_count", "all_phrases": ["45"], "required_evidence": [{"filename": "CSTART_2026_Event_Report.pdf", "location": {"page": 1}}]}
+      ],
+      "required_evidence_relationships": [],
+      "conflict_requirements": [
+        {"id": "cstart_participant_category", "observations": [
+          {"id": "event_report_participants", "all_phrases": ["45", "third", "fourth"], "required_evidence": [{"filename": "CSTART_2026_Event_Report.pdf", "location": {"page": 1}}]},
+          {"id": "meeting_minutes_participants", "all_phrases": ["45", "third-year"], "required_evidence": [{"filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf", "location": {"page": 1}}]}
+        ]}
+      ],
+      "lifecycle_requirements": [],
+      "direct_citation_requirements": [],
+      "acceptable_scope": ["The answer may omit unrelated event details, but not the category discrepancy."],
+      "incomplete_conditions": ["Only one participant observation is stated.", "The count is stated without the differing categories."]
+    },
+    {
+      "id": "E015",
+      "question": "What happened on 25 July 2026?",
+      "required_observations": [
+        {"id": "faculty_meeting", "all_phrases": ["faculty meeting", "25 July 2026"], "required_evidence": [{"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Meeting Log", "row": 3}}]}
+      ],
+      "required_evidence_relationships": [],
+      "conflict_requirements": [],
+      "lifecycle_requirements": [],
+      "direct_citation_requirements": [],
+      "acceptable_scope": ["Attendance facts are optional unless claimed; if claimed, exact 25 July column evidence is required."],
+      "incomplete_conditions": ["The faculty meeting or its date is omitted."]
+    },
+    {
+      "id": "E016",
+      "question": "What happened on 10 August 2026?",
+      "required_observations": [
+        {"id": "planning_meeting", "all_phrases": ["planning", "10 August 2026"], "required_evidence": [{"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Meeting Log", "row": 5}}]},
+        {"id": "completed_event", "all_phrases": ["completed", "10", "14 August"], "required_evidence": [{"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Events", "row": 3}}]}
+      ],
+      "required_evidence_relationships": [],
+      "conflict_requirements": [],
+      "lifecycle_requirements": [
+        {"id": "fdp_planning_vs_completed", "observations": [
+          {"id": "planning", "all_phrases": ["planning"], "required_evidence": [{"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Meeting Log", "row": 5}}]},
+          {"id": "completed", "all_phrases": ["completed"], "required_evidence": [{"filename": "CS_Meetings_Events_Log.xlsx", "location": {"sheet": "Events", "row": 3}}]}
+        ]}
+      ],
+      "direct_citation_requirements": [],
+      "acceptable_scope": ["A narrowly scoped answer must identify that it is discussing only the planning meeting or only the completed event."],
+      "incomplete_conditions": ["Planning is presented as completion or completion is presented as planning.", "One lifecycle observation is silently omitted."]
+    },
+    {
+      "id": "E017",
+      "question": "How many participants were reported for C-START?",
+      "required_observations": [
+        {"id": "reported_count", "all_phrases": ["45"], "required_evidence": [{"filename": "CSTART_2026_Event_Report.pdf", "location": {"page": 1}}]}
+      ],
+      "required_evidence_relationships": [],
+      "conflict_requirements": [
+        {"id": "participant_category_discrepancy", "observations": [
+          {"id": "event_report_category", "all_phrases": ["45", "third", "fourth"], "required_evidence": [{"filename": "CSTART_2026_Event_Report.pdf", "location": {"page": 1}}]},
+          {"id": "meeting_minutes_category", "all_phrases": ["45", "third-year"], "required_evidence": [{"filename": "CS_Dept_Meeting_Minutes_18Jul2026.pdf", "location": {"page": 1}}]}
+        ]}
+      ],
+      "lifecycle_requirements": [],
+      "direct_citation_requirements": [],
+      "acceptable_scope": ["The numeric answer may be concise, but a fully grounded answer must preserve the category discrepancy."],
+      "incomplete_conditions": ["Only the number 45 is returned without the two category observations."]
+    }
+  ]
+}

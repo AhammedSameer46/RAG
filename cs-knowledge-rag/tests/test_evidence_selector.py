@@ -156,6 +156,56 @@ class EvidenceSelectorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.select(response)
 
+    def test_participant_conflict_is_selected_as_a_group(self):
+        result = self.select(
+            EvidenceSelectionConfig(max_evidence_units=2, max_characters=100000)
+        )
+        groups = result["selection_metadata"]["coverage"]["conflict_groups"]
+        self.assertTrue(groups)
+        group = groups[0]
+        self.assertTrue(group["complete"])
+        self.assertEqual(
+            set(group["evidence_ids"]),
+            set(group["selected_evidence_ids"]),
+        )
+
+    def test_conflict_budget_exhaustion_is_explicit(self):
+        result = self.select(
+            EvidenceSelectionConfig(max_evidence_units=1, max_characters=100000)
+        )
+        groups = result["selection_metadata"]["coverage"]["conflict_groups"]
+        self.assertTrue(groups)
+        self.assertFalse(groups[0]["complete"])
+        self.assertLessEqual(
+            result["selection_metadata"]["selected_count"], 1
+        )
+
+    def test_date_activity_prioritizes_distinct_record_types(self):
+        result = self.select(
+            EvidenceSelectionConfig(max_evidence_units=5, max_characters=100000)
+        )
+        selected_types = {
+            record["record_type"] for record in result["selected_records"]
+        }
+        self.assertTrue({"meeting", "event", "attendance"} <= selected_types)
+
+    def test_lifecycle_group_preserves_planning_and_completed_records(self):
+        pipeline = QueryRetrievalPipeline.from_json(
+            ROOT / "output" / "sample_normalized.json"
+        )
+        response = build_evidence_response(
+            pipeline.run("What happened on 10 August 2026?")
+        )
+        query = response["query_understanding"]
+        result = self.selector.select(
+            "What happened on 10 August 2026?",
+            query,
+            response,
+            EvidenceSelectionConfig(max_evidence_units=3, max_characters=100000),
+        )
+        groups = result["selection_metadata"]["coverage"]["coverage_groups"]
+        self.assertTrue(any(group["kind"] == "lifecycle" and group["complete"] for group in groups))
+
     def test_supporting_tier_beats_independent_specificity(self):
         response = {
             "status": "answerable",

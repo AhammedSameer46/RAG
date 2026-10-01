@@ -7,6 +7,7 @@ from unittest.mock import patch
 from urllib.error import HTTPError, URLError
 
 from cs_ingest.answer_contract import validate_answer
+from cs_ingest.answer_plan import build_answer_plan
 from cs_ingest.citation_builder import CitationBuilder
 from cs_ingest.evidence_response import build_evidence_response
 from cs_ingest.ollama_answer_generator import (
@@ -19,6 +20,7 @@ from cs_ingest.ollama_answer_generator import (
     _user_prompt,
 )
 from cs_ingest.pipeline import QueryRetrievalPipeline
+from cs_ingest.model_facing_context import build_model_facing_context
 
 
 ROOT = Path(__file__).parents[1]
@@ -48,6 +50,8 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
         cls.evidence_response = build_evidence_response(
             pipeline.run("Who coordinated C-START?")
         )
+        cls.evidence_response["answer_plan"] = build_answer_plan(cls.evidence_response)
+        cls.model_context = build_model_facing_context(cls.evidence_response)
         cls.clarification_response = build_evidence_response(
             pipeline.run("What happened on 18 July?")
         )
@@ -68,7 +72,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
         ) as urlopen:
             result = OllamaAnswerGenerator(
                 base_url="http://127.0.0.1:11434/", model="test-model"
-            ).generate("Who coordinated C-START?", self.evidence_response)
+            ).generate("Who coordinated C-START?", self.model_context)
 
         self.assertEqual(result, answer)
         http_request = urlopen.call_args.args[0]
@@ -77,14 +81,18 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
         self.assertEqual(payload["format"], "json")
         self.assertFalse(payload["stream"])
         self.assertIn("Who coordinated C-START?", payload["prompt"])
-        self.assertIn("Evidence context (JSON):", payload["prompt"])
-        self.assertIn('"supporting_evidence"', payload["prompt"])
-        self.assertIn('"citation_ref": "E1"', payload["prompt"])
+        self.assertIn("Model context (JSON):", payload["prompt"])
+        self.assertIn('"question": "Who coordinated C-START?"', payload["prompt"])
+        self.assertIn('"answer_plan"', payload["prompt"])
+        self.assertIn('"model_context"', payload["prompt"])
+        self.assertNotIn('"answer_context"', payload["prompt"])
+        self.assertNotIn('"supporting_evidence"', payload["prompt"])
+        self.assertIn('"id": "E1"', payload["prompt"])
         self.assertIn('"evidence"', payload["prompt"])
         self.assertNotIn("selection", payload["prompt"])
         self.assertNotIn("query_understanding", payload["prompt"])
         self.assertNotIn('"sources"', payload["prompt"])
-        self.assertNotIn('"coverage"', payload["prompt"])
+        self.assertIn('"coverage"', payload["prompt"])
         self.assertNotIn("sample_normalized.json", payload["prompt"])
         self.assertNotIn("retriever", payload["prompt"].lower())
 
@@ -99,37 +107,37 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
         self.assertIn('"answered | insufficient_evidence | clarification_required"', _SYSTEM_PROMPT)
         self.assertIn("EXACTLY these three top-level fields", _SYSTEM_PROMPT)
 
-    def test_user_prompt_contains_only_question_and_answer_context(self):
-        response = deepcopy(self.evidence_response)
-        response["selection"] = {"excluded_evidence_ids": ["excluded"]}
-        response["coverage"] = {"supporting_coverage_complete": False}
-        prompt = _user_prompt("Question", response)
-        from cs_ingest.ollama_answer_generator import _model_answer_context
-        expected_context = json.dumps(
-            _model_answer_context(response), sort_keys=True
-        )
+    def test_user_prompt_contains_question_plan_and_answer_context(self):
+        prompt = _user_prompt("Question", self.model_context)
+        expected_context = json.dumps({
+            "question": "Question",
+            "model_context": self.model_context,
+        }, sort_keys=True)
         self.assertEqual(
             prompt,
-            "Question:\nQuestion\n\nEvidence context (JSON):\n" + expected_context,
+            "Model context (JSON):\n" + expected_context,
         )
-        self.assertNotIn("excluded_evidence_ids", prompt)
-        self.assertNotIn("supporting_coverage_complete", prompt)
+        self.assertNotIn("source_id", prompt)
         self.assertNotIn("query_understanding", prompt)
         self.assertNotIn('"sources"', prompt)
+
+    def test_system_prompt_describes_generic_answer_plan_rules(self):
+        for text in (
+            "The Answer Plan is deterministic metadata",
+            "Preserve every observation marked for separate preservation.",
+            "Preserve every lifecycle distinction marked as required.",
+            "Cite the underlying evidence handles, never the Answer Plan.",
+            "If model-context coverage is incomplete, do not invent missing information.",
+        ):
+            self.assertIn(text, _SYSTEM_PROMPT)
+        for term in ("E001", "E014", "E016", "E017", "C-START"):
+            self.assertNotIn(term, _SYSTEM_PROMPT)
 
     def test_non_answerable_statuses_do_not_call_ollama(self):
         generator = OllamaAnswerGenerator()
         with patch("cs_ingest.ollama_answer_generator.request.urlopen") as urlopen:
-            clarification = generator.generate("Question", self.clarification_response)
-            insufficient = generator.generate("Question", self.insufficient_response)
-        self.assertEqual(
-            clarification,
-            {"status": "clarification_required", "claims": []},
-        )
-        self.assertEqual(
-            insufficient,
-            {"status": "insufficient_evidence", "claims": []},
-        )
+            with self.assertRaises(OllamaResponseError):
+                generator.generate("Question", {"answer_plan": {}, "evidence": []})
         urlopen.assert_not_called()
 
     def test_valid_json_response_is_parsed(self):
@@ -139,7 +147,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
             return_value=FakeHTTPResponse(self._model_payload(answer)),
         ):
             self.assertEqual(
-                OllamaAnswerGenerator().generate("Question", self.evidence_response),
+                OllamaAnswerGenerator().generate("Question", self.model_context),
                 answer,
             )
 
@@ -153,7 +161,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
             return_value=FakeHTTPResponse(self._model_payload(answer)),
         ):
             result = OllamaAnswerGenerator().generate(
-                "Question", self.evidence_response
+                "Question", self.model_context
             )
         self.assertEqual(
             validate_answer(
@@ -169,7 +177,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
             return_value=FakeHTTPResponse(b"{not-json"),
         ):
             with self.assertRaises(OllamaResponseError):
-                OllamaAnswerGenerator().generate("Question", self.evidence_response)
+                OllamaAnswerGenerator().generate("Question", self.model_context)
 
     def test_missing_fields_raises_response_error(self):
         payload = self._model_payload({"status": "answered", "answer": "Missing citations"})
@@ -178,7 +186,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
             return_value=FakeHTTPResponse(payload),
         ):
             with self.assertRaises(OllamaResponseError):
-                OllamaAnswerGenerator().generate("Question", self.evidence_response)
+                OllamaAnswerGenerator().generate("Question", self.model_context)
 
     def test_unsupported_status_raises_response_error(self):
         payload = self._model_payload(
@@ -189,7 +197,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
             return_value=FakeHTTPResponse(payload),
         ):
             with self.assertRaises(OllamaResponseError):
-                OllamaAnswerGenerator().generate("Question", self.evidence_response)
+                OllamaAnswerGenerator().generate("Question", self.model_context)
 
     def test_http_error_is_explicit(self):
         http_error = HTTPError("http://localhost", 503, "unavailable", {}, None)
@@ -198,7 +206,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
             side_effect=http_error,
         ):
             with self.assertRaises(OllamaHTTPError):
-                OllamaAnswerGenerator().generate("Question", self.evidence_response)
+                OllamaAnswerGenerator().generate("Question", self.model_context)
 
     def test_timeout_is_explicit(self):
         with patch(
@@ -206,7 +214,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
             side_effect=socket.timeout(),
         ):
             with self.assertRaises(OllamaTimeoutError):
-                OllamaAnswerGenerator().generate("Question", self.evidence_response)
+                OllamaAnswerGenerator().generate("Question", self.model_context)
 
     def test_connection_failure_is_explicit(self):
         with patch(
@@ -214,7 +222,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
             side_effect=URLError("connection refused"),
         ):
             with self.assertRaises(OllamaConnectionError):
-                OllamaAnswerGenerator().generate("Question", self.evidence_response)
+                OllamaAnswerGenerator().generate("Question", self.model_context)
 
     def test_evidence_response_is_not_mutated(self):
         snapshot = deepcopy(self.evidence_response)
@@ -223,7 +231,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
             "cs_ingest.ollama_answer_generator.request.urlopen",
             return_value=FakeHTTPResponse(self._model_payload(answer)),
         ):
-            OllamaAnswerGenerator().generate("Question", self.evidence_response)
+            OllamaAnswerGenerator().generate("Question", self.model_context)
         self.assertEqual(self.evidence_response, snapshot)
 
     def test_invalid_citations_pass_through_for_contract_validation(self):
@@ -236,7 +244,7 @@ class OllamaAnswerGeneratorTests(unittest.TestCase):
             return_value=FakeHTTPResponse(self._model_payload(answer)),
         ):
             result = OllamaAnswerGenerator().generate(
-                "Question", self.evidence_response
+                "Question", self.model_context
             )
         validation = validate_answer(result, self.evidence_response)
         self.assertFalse(validation["valid"])

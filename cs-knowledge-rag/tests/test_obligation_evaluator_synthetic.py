@@ -203,6 +203,83 @@ class SyntheticObligationEvaluatorTests(unittest.TestCase):
         self.assertEqual(one_category["status"], "PARTIAL")
         self.assertIn("participant_category_discrepancy", one_category["missing_obligations"])
 
+    def test_number_word_variants_are_equivalent(self):
+        result = self.evaluate(
+            "E017",
+            [
+                {
+                    "text": "The reported count was Forty-five.",
+                    "citation_refs": ["E1"],
+                },
+                {
+                    "text": "The event report described forty five third and fourth year students.",
+                    "citation_refs": ["E1"],
+                },
+                {
+                    "text": "The meeting minutes described 45 third-year students.",
+                    "citation_refs": ["E2"],
+                },
+            ],
+        )
+        self.assertEqual(result["status"], "PASS")
+
+    def test_case_whitespace_and_boundary_punctuation_are_equivalent(self):
+        result = self.evaluate(
+            "E006",
+            [
+                {
+                    "text": "  PROF. SARAH THOMAS coordinated C-START!!! ",
+                    "citation_refs": ["E1"],
+                }
+            ],
+        )
+        self.assertEqual(result["status"], "PASS")
+
+    def test_different_numbers_do_not_match(self):
+        result = self.evaluate(
+            "E017",
+            [
+                {
+                    "text": "The reported count was 54 participants.",
+                    "citation_refs": ["E1"],
+                }
+            ],
+        )
+        self.assertEqual(result["status"], "FAIL")
+        self.assertIn("reported_count", result["missing_obligations"])
+
+    def test_categories_and_lifecycle_dates_remain_distinct(self):
+        participant = self.evaluate(
+            "E014",
+            [
+                {
+                    "text": "45 third-year students participated.",
+                    "citation_refs": ["E1"],
+                },
+                {
+                    "text": "45 third-year students attended.",
+                    "citation_refs": ["E2"],
+                },
+            ],
+        )
+        lifecycle = self.evaluate(
+            "E016",
+            [
+                {
+                    "text": "The FDP Planning meeting occurred on 10 August 2026.",
+                    "citation_refs": ["E5"],
+                },
+                {
+                    "text": "The FDP event was recorded as Planned for 10-14 August 2026.",
+                    "citation_refs": ["E4"],
+                },
+            ],
+        )
+        self.assertNotEqual(participant["status"], "PASS")
+        self.assertIn("cstart_participant_category", participant["missing_obligations"])
+        self.assertNotEqual(lifecycle["status"], "PASS")
+        self.assertIn("completed_event", lifecycle["missing_obligations"])
+
     def test_invalid_handle_is_failure(self):
         result = self.evaluate(
             "E006",

@@ -73,14 +73,10 @@ class OllamaAnswerPipelineIntegrationTests(unittest.TestCase):
             captured["timeout"] = timeout
             payload = json.loads(http_request.data)
             captured["prompt"] = payload["prompt"]
-            evidence_response = {
-                "status": "answerable",
-                "answer_context": json.loads(
-                    payload["prompt"].split("Evidence context (JSON):\n", 1)[1]
-                ),
-            }
             return FakeHTTPResponse(
-                self._model_payload(self._answerable_answer(evidence_response))
+                self._model_payload({"status": "answered", "claims": [
+                    {"text": "The retrieved evidence identifies the coordinator.", "citation_refs": ["E1"]}
+                ]})
             )
 
         with patch(
@@ -97,7 +93,9 @@ class OllamaAnswerPipelineIntegrationTests(unittest.TestCase):
         self.assertEqual(captured["timeout"], 30.0)
         self.assertEqual(urlopen.call_count, 1)
         self.assertIn("Who coordinated C-START?", captured["prompt"])
-        self.assertIn('"supporting_evidence"', captured["prompt"])
+        self.assertIn('"answer_plan"', captured["prompt"])
+        self.assertIn('"model_context"', captured["prompt"])
+        self.assertNotIn('"supporting_evidence"', captured["prompt"])
         self.assertNotIn("retriever", captured["prompt"].lower())
         self.assertNotIn("sample_normalized.json", captured["prompt"])
         self.assertNotEqual(expected_evidence, result["evidence_response"])
@@ -163,7 +161,7 @@ class OllamaAnswerPipelineIntegrationTests(unittest.TestCase):
         self.assertTrue(result["validation"]["valid"])
         urlopen.assert_not_called()
 
-    def test_evidence_response_is_unchanged_across_pipeline(self):
+    def test_evidence_context_is_unchanged_and_plan_is_additive(self):
         question = "Who coordinated C-START?"
         expected = build_evidence_response(self.query_pipeline.run(question))
         answer = self._answerable_answer(expected)
@@ -173,7 +171,11 @@ class OllamaAnswerPipelineIntegrationTests(unittest.TestCase):
             return_value=FakeHTTPResponse(self._model_payload(answer)),
         ):
             result = pipeline.run(question)
-        self.assertEqual(result["evidence_response"], expected)
+        self.assertEqual(
+            result["evidence_response"]["answer_context"],
+            expected["answer_context"],
+        )
+        self.assertIn("answer_plan", result["evidence_response"])
 
 
 if __name__ == "__main__":

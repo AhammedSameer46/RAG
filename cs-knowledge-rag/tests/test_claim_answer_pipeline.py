@@ -104,3 +104,46 @@ class ClaimAnswerPipelineTests(unittest.TestCase):
         )
         self.assertTrue(result["validation"]["valid"])
         self.assertEqual(len(result["answer"]["citations"]), 2)
+
+    def test_generator_receives_answer_plan_without_replacing_evidence(self):
+        captured = {}
+
+        class CapturingGenerator(ClaimGenerator):
+            def generate(self, question, evidence_response):
+                captured["response"] = evidence_response
+                return super().generate(question, evidence_response)
+
+        result = AnswerPipeline(
+            self.query_pipeline,
+            CapturingGenerator(
+                [{"text": "Evidence.", "citation_refs": ["E1"]}]
+            ),
+            EvidenceSelector(),
+            self.config,
+        ).run("Who coordinated C-START?")
+        response = captured["response"]
+        self.assertTrue(result["validation"]["valid"])
+        self.assertIn("answer_plan", response)
+        self.assertIn("evidence", response)
+        self.assertTrue(response["evidence"])
+        self.assertIn("observations", response["answer_plan"])
+
+    def test_non_answerable_generator_context_has_no_factual_plan(self):
+        captured = {}
+
+        class CapturingGenerator(ClaimGenerator):
+            def generate(self, question, evidence_response):
+                captured["response"] = evidence_response
+                return super().generate(question, evidence_response)
+
+        result = AnswerPipeline(
+            self.query_pipeline,
+            CapturingGenerator([]),
+            EvidenceSelector(),
+            self.config,
+        ).run("What happened on 18 July?")
+        self.assertEqual(result["answer"]["status"], "clarification_required")
+        self.assertNotIn("response", captured)
+        plan = result["evidence_response"]["answer_plan"]
+        self.assertEqual(plan["observations"], [])
+        self.assertEqual(plan["answerability"], "clarification_required")

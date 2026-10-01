@@ -14,13 +14,13 @@ ROOT = Path(__file__).parents[1]
 
 class RecordingGenerator:
     def __init__(self, citation_source="selected"):
-        self.evidence_response = None
+        self.model_context = None
         self.citation_source = citation_source
 
-    def generate(self, question, evidence_response):
+    def generate(self, question, model_context):
         del question
-        self.evidence_response = evidence_response
-        evidence = evidence_response["answer_context"]["supporting_evidence"][0]
+        self.model_context = model_context
+        evidence = model_context["evidence"][0]
         if self.citation_source == "excluded":
             evidence = self.excluded_evidence
         return {
@@ -33,8 +33,8 @@ class CountingGenerator:
     def __init__(self):
         self.called = False
 
-    def generate(self, question, evidence_response):
-        del question, evidence_response
+    def generate(self, question, model_context):
+        del question, model_context
         self.called = True
         return {"status": "answered", "claims": [{"text": "unexpected", "citation_refs": []}]}
 
@@ -72,25 +72,8 @@ class EvidenceSelectorPipelineTests(unittest.TestCase):
         result = self.make_pipeline(generator).run(
             "What happened on 18 July 2026?"
         )
-        supplied_ids = {
-            evidence["evidence_id"]
-            for collection in (
-                generator.evidence_response["answer_context"][
-                    "supporting_evidence"
-                ],
-                generator.evidence_response["answer_context"][
-                    "independent_evidence"
-                ],
-            )
-            for evidence in collection
-        }
-        selected_ids = set(
-            generator.evidence_response["selection"]["selected_evidence_ids"]
-        )
-        self.assertEqual(supplied_ids, selected_ids)
-        self.assertEqual(
-            generator.evidence_response["selection"]["selected_count"], 3
-        )
+        supplied_ids = {item["id"] for item in generator.model_context["evidence"]}
+        self.assertEqual(supplied_ids, {"E1", "E2", "E3"})
         self.assertTrue(result["validation"]["valid"])
 
     def test_excluded_evidence_cannot_be_cited(self):
@@ -98,11 +81,7 @@ class EvidenceSelectorPipelineTests(unittest.TestCase):
         unrestricted = self.make_pipeline(RecordingGenerator()).run(
             "What happened on 18 July 2026?"
         )
-        excluded_ids = set(
-            unrestricted["evidence_response"]
-            .get("selection", {})
-            .get("excluded_evidence_ids", [])
-        )
+        excluded_ids = set(unrestricted["evidence_response"]["selection"]["excluded_evidence_ids"])
         self.assertTrue(excluded_ids)
         full_response = build_evidence_response(
             self.query_pipeline.run("What happened on 18 July 2026?")
@@ -123,7 +102,7 @@ class EvidenceSelectorPipelineTests(unittest.TestCase):
         result = self.make_pipeline(generator).run(
             "What happened on 18 July 2026?"
         )
-        response = generator.evidence_response
+        response = result["evidence_response"]
         self.assertEqual(
             response["selection"]["selected_evidence_ids"],
             result["evidence_response"]["selection"]["selected_evidence_ids"],

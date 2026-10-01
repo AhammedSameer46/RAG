@@ -8,8 +8,6 @@ from typing import Any
 from urllib import error, request
 
 from .answer_generator import AnswerGenerator
-from .citation_builder import citation_handles
-
 _STATUSES = {"answered", "insufficient_evidence", "clarification_required"}
 _DEFAULT_MODEL = "SET_OLLAMA_MODEL"
 
@@ -48,19 +46,31 @@ class OllamaAnswerGenerator:
         self.timeout = timeout
 
     def generate(
-        self, question: str, evidence_response: dict[str, Any]
+        self, question: str, model_context: dict[str, Any]
     ) -> dict[str, Any]:
         """Generate an answer, or raise an explicit provider error."""
-        status = evidence_response.get("status")
-        if status in {"clarification_required", "insufficient_evidence"}:
-            return {"status": status, "claims": []}
-        if status != "answerable":
-            raise OllamaResponseError("Evidence response status is unsupported.")
+        if not isinstance(model_context, dict):
+            raise OllamaResponseError("Model context must be an object.")
+        plan = model_context.get("answer_plan")
+        if (
+            not isinstance(plan, dict)
+            or not isinstance(model_context.get("evidence"), list)
+            or not all(
+                field in plan
+                for field in (
+                    "observations",
+                    "conflict_groups",
+                    "lifecycle_groups",
+                    "coverage",
+                )
+            )
+        ):
+            raise OllamaResponseError("Model context has an unsupported shape.")
 
         payload = {
             "model": self.model,
             "system": _SYSTEM_PROMPT,
-            "prompt": _user_prompt(question, evidence_response),
+            "prompt": _user_prompt(question, model_context),
             "format": "json",
             "stream": False,
         }
@@ -85,30 +95,15 @@ class OllamaAnswerGenerator:
         return _parse_response(response_body)
 
 
-def _user_prompt(question: str, evidence_response: dict[str, Any]) -> str:
-    context = _model_answer_context(evidence_response)
+def _user_prompt(question: str, model_context: dict[str, Any]) -> str:
+    context = {
+        "question": question,
+        "model_context": model_context,
+    }
     return (
-        "Question:\n"
-        + question
-        + "\n\nEvidence context (JSON):\n"
+        "Model context (JSON):\n"
         + json.dumps(context, sort_keys=True)
     )
-
-
-def _model_answer_context(evidence_response: dict[str, Any]) -> dict[str, Any]:
-    context = json.loads(json.dumps(evidence_response["answer_context"]))
-    handles = citation_handles(evidence_response)
-    for collection in ("supporting_evidence", "independent_evidence"):
-        wrapped = []
-        for evidence in context.get(collection, []):
-            handle = next(
-                handle
-                for handle, selected in handles.items()
-                if selected["evidence_id"] == evidence["evidence_id"]
-            )
-            wrapped.append({"citation_ref": handle, "evidence": evidence})
-        context[collection] = wrapped
-    return context
 
 
 def _parse_response(response_body: bytes) -> dict[str, Any]:
@@ -153,6 +148,23 @@ Return ONLY one JSON object with EXACTLY these three top-level fields:
 
 Rules:
 
+- The supplied `model_context` is authoritative for the answer.
+- The Answer Plan is deterministic metadata describing how supplied evidence
+  is organized; it is not factual evidence.
+- Evidence objects in `model_context.evidence` are the factual source material.
+- Preserve every observation marked for separate preservation.
+- Preserve every lifecycle distinction marked as required.
+- Cite the underlying evidence handles, never the Answer Plan.
+- If model-context coverage is incomplete, do not invent missing information.
+- Every materially distinct supported observation relevant to the question
+  MUST be represented in one or more atomic claims.
+- Never collapse two source observations merely because they concern the same
+  event, person, count, or other subject.
+- If sources report different values, categories, or statuses, preserve both
+  observations and attribute them separately.
+- Related records across time MUST remain distinct unless the evidence
+  explicitly states that they are the same record.
+- Planning, meeting, status, and event lifecycle stages MUST NOT be collapsed.
 - For an answerable question, status MUST be exactly "answered".
 - For insufficient evidence, status MUST be exactly "insufficient_evidence".
 - For a clarification request, status MUST be exactly "clarification_required".
@@ -164,6 +176,10 @@ Rules:
 - Every factual claim must cite the evidence that directly supports that claim.
 - Conflicting observations MUST remain separate, attributed claims; do not reconcile them.
 - Do not merge planning, scheduling, and completion into one claim.
+- Do not infer a relationship merely because records share a date, person,
+  event name, or number.
+- If evidence is insufficient, say so rather than filling gaps.
+- Do not introduce information from model knowledge.
 - Handles are the ONLY citation identifiers allowed.
 - Never output source IDs, evidence IDs, filenames, or locations.
 - Do not fabricate citation refs.

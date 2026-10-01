@@ -15,12 +15,12 @@ ROOT = Path(__file__).parents[1]
 class RecordingGenerator:
     def __init__(self):
         self.question = None
-        self.evidence_response = None
+        self.model_context = None
 
-    def generate(self, question, evidence_response):
+    def generate(self, question, model_context):
         self.question = question
-        self.evidence_response = evidence_response
-        evidence = evidence_response["answer_context"]["supporting_evidence"][0]
+        self.model_context = model_context
+        evidence = model_context["evidence"][0]
         return {
             "status": "answered",
             "claims": [{"text": "Recorded evidence.", "citation_refs": ["E1"]}],
@@ -53,10 +53,11 @@ class AnswerGeneratorInterfaceTests(unittest.TestCase):
         question = "Who coordinated C-START?"
         result = pipeline.run(question)
         self.assertEqual(generator.question, question)
-        self.assertIsNotNone(generator.evidence_response)
-        self.assertIn("answer_context", generator.evidence_response)
-        self.assertNotIn("retrieval", generator.evidence_response)
-        self.assertNotIn("sample_normalized.json", str(generator.evidence_response))
+        self.assertIsNotNone(generator.model_context)
+        self.assertIn("answer_plan", generator.model_context)
+        self.assertIn("evidence", generator.model_context)
+        self.assertNotIn("answer_context", generator.model_context)
+        self.assertNotIn("sample_normalized.json", str(generator.model_context))
         self.assertTrue(result["validation"]["valid"])
 
     def test_custom_generator_output_is_validated(self):
@@ -91,7 +92,7 @@ class AnswerGeneratorInterfaceTests(unittest.TestCase):
         pipeline = AnswerPipeline(self.query_pipeline, generator)
         result = pipeline.run("Who coordinated C-START?")
         snapshot = deepcopy(result["evidence_response"])
-        generator.generate("again", result["evidence_response"])
+        generator.generate("again", generator.model_context)
         self.assertEqual(result["evidence_response"], snapshot)
 
 

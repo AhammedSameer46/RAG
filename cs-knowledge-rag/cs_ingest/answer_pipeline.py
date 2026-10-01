@@ -8,12 +8,14 @@ import inspect
 from typing import Any
 
 from .answer_generator import AnswerGenerator
+from .answer_plan import build_answer_plan
 from .answer_contract import validate_answer
 from .citation_builder import CitationBuilder
 from .claim_answer_contract import validate_claim_answer
 from .evidence_response import build_evidence_response
 from .evidence_selector import EvidenceSelectionConfig, EvidenceSelector
 from .mock_answer_generator import MockAnswerGenerator
+from .model_facing_context import build_model_facing_context
 from .pipeline import QueryRetrievalPipeline
 
 
@@ -68,6 +70,11 @@ class AnswerPipeline:
             generator_evidence_response = _selected_evidence_response(
                 evidence_response, selection
             )
+        generator_evidence_response = deepcopy(generator_evidence_response)
+        generator_evidence_response["answer_plan"] = build_answer_plan(
+            generator_evidence_response
+        )
+        model_context = build_model_facing_context(generator_evidence_response)
         if evidence_response["status"] in {
             "insufficient_evidence",
             "clarification_required",
@@ -79,7 +86,7 @@ class AnswerPipeline:
             }
         else:
             answer = _generate(
-                self.answer_generator, question, generator_evidence_response
+                self.answer_generator, question, model_context
             )
             validate_claim_answer(answer, generator_evidence_response)
             answer = self.citation_builder.build(answer, generator_evidence_response)

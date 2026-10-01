@@ -7,10 +7,10 @@ from typing import Any, Protocol, runtime_checkable
 
 @runtime_checkable
 class AnswerGenerator(Protocol):
-    """Generate an existing answer-contract object from an evidence response."""
+    """Generate a claim answer from compact model-facing context."""
 
     def generate(
         self, question: str, evidence_response: dict[str, Any]
     ) -> dict[str, Any]:
-        """Return ``status``, ``answer``, and provenance-bearing ``citations``."""
+        """Return the internal claim answer contract."""
         ...

@@ -3,7 +3,50 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import re
 from typing import Any
+
+
+_CARDINAL_WORDS = {
+    "zero": 0,
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
+    "eleven": 11,
+    "twelve": 12,
+    "thirteen": 13,
+    "fourteen": 14,
+    "fifteen": 15,
+    "sixteen": 16,
+    "seventeen": 17,
+    "eighteen": 18,
+    "nineteen": 19,
+    "twenty": 20,
+    "thirty": 30,
+    "forty": 40,
+    "fifty": 50,
+    "sixty": 60,
+    "seventy": 70,
+    "eighty": 80,
+    "ninety": 90,
+}
+_NUMBER_WORD_PATTERN = re.compile(
+    r"\b("
+    r"(?:twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)"
+    r"(?:[-\s](?:one|two|three|four|five|six|seven|eight|nine))?"
+    r"|zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|"
+    r"twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen"
+    r")\b",
+    re.IGNORECASE,
+)
+_BOUNDARY_PUNCTUATION = re.compile(r"[^\w\s-]+", re.UNICODE)
 
 
 def evaluate_obligations(
@@ -154,10 +197,32 @@ def _evaluate_direct_requirements(requirements, claims, handle_ids, evidence_by_
 
 
 def _matches_phrases(requirement: dict[str, Any], text: str) -> bool:
-    return all(phrase.casefold() in text for phrase in requirement.get("all_phrases", [])) and (
+    normalized_text = _normalize_phrase_text(text)
+    return all(
+        _normalize_phrase_text(phrase) in normalized_text
+        for phrase in requirement.get("all_phrases", [])
+    ) and (
         not requirement.get("any_phrases")
-        or any(phrase.casefold() in text for phrase in requirement["any_phrases"])
+        or any(
+            _normalize_phrase_text(phrase) in normalized_text
+            for phrase in requirement["any_phrases"]
+        )
     )
+
+
+def _normalize_phrase_text(value: str) -> str:
+    """Normalize lexical presentation without changing factual distinctions."""
+    normalized = _BOUNDARY_PUNCTUATION.sub(" ", value.casefold())
+
+    def replace_number(match: re.Match[str]) -> str:
+        words = match.group(0).replace("-", " ").split()
+        if len(words) == 1:
+            return str(_CARDINAL_WORDS[words[0]])
+        tens, units = words
+        return str(_CARDINAL_WORDS[tens] + _CARDINAL_WORDS[units])
+
+    normalized = _NUMBER_WORD_PATTERN.sub(replace_number, normalized)
+    return " ".join(normalized.split())
 
 
 def _matches_selector(selector: dict[str, Any], evidence: dict[str, Any]) -> bool:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
@@ -7,6 +8,7 @@ import pytest
 from cs_ingest.drive import DriveAPIError
 from cs_ingest.drive_ingestion import (
     UnsupportedDriveFileTypeError,
+    ingest_drive_file,
     load_drive_file,
 )
 
@@ -82,5 +84,98 @@ def test_adapter_download_errors_propagate_as_drive_errors():
 
     with pytest.raises(DriveAPIError) as raised:
         load_drive_file(adapter, "drive-file-id")
+
+    assert raised.value is error
+
+
+def test_pdf_is_materialized_and_sent_to_existing_ingestion(monkeypatch):
+    adapter = _adapter("application/pdf", b"%PDF-test")
+    observed: dict[str, object] = {}
+
+    def fake_ingest_directory(input_dir):
+        path = Path(input_dir)
+        observed["path"] = path
+        observed["files"] = [item.name for item in path.iterdir()]
+        observed["content"] = (path / "minutes.pdf").read_bytes()
+        return {
+            "schema_version": 1,
+            "sources": [{"filename": "minutes.pdf", "file_type": "pdf"}],
+            "pdf_pages": [],
+            "worksheets": [],
+            "dates": [],
+        }
+
+    monkeypatch.setattr(
+        "cs_ingest.drive_ingestion.ingest_directory",
+        fake_ingest_directory,
+    )
+
+    result = ingest_drive_file(adapter, "drive-file-id")
+
+    assert result["sources"][0]["filename"] == "minutes.pdf"
+    assert observed["files"] == ["minutes.pdf"]
+    assert observed["content"] == b"%PDF-test"
+    assert not observed["path"].exists()
+
+
+def test_xlsx_is_materialized_with_original_filename(monkeypatch):
+    adapter = _adapter(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        b"xlsx bytes",
+    )
+    observed: dict[str, object] = {}
+
+    def fake_ingest_directory(input_dir):
+        path = Path(input_dir)
+        observed["files"] = [item.name for item in path.iterdir()]
+        observed["content"] = (path / "data.xlsx").read_bytes()
+        return {
+            "schema_version": 1,
+            "sources": [{"filename": "data.xlsx", "file_type": "xlsx"}],
+            "pdf_pages": [],
+            "worksheets": [{"source": "data.xlsx"}],
+            "dates": [],
+        }
+
+    monkeypatch.setattr(
+        "cs_ingest.drive_ingestion.ingest_directory",
+        fake_ingest_directory,
+    )
+
+    result = ingest_drive_file(adapter, "drive-file-id")
+
+    assert result["sources"][0]["filename"] == "data.xlsx"
+    assert observed["files"] == ["data.xlsx"]
+    assert observed["content"] == b"xlsx bytes"
+
+
+def test_materialized_file_is_cleaned_up_when_extraction_fails(monkeypatch):
+    adapter = _adapter("application/pdf", b"%PDF-test")
+    observed: dict[str, Path] = {}
+
+    def failing_ingest_directory(input_dir):
+        path = Path(input_dir)
+        observed["path"] = path
+        assert (path / "minutes.pdf").exists()
+        raise ValueError("extraction failed")
+
+    monkeypatch.setattr(
+        "cs_ingest.drive_ingestion.ingest_directory",
+        failing_ingest_directory,
+    )
+
+    with pytest.raises(ValueError, match="extraction failed"):
+        ingest_drive_file(adapter, "drive-file-id")
+
+    assert not observed["path"].exists()
+
+
+def test_drive_adapter_errors_propagate_before_materialization():
+    adapter = Mock()
+    error = DriveAPIError("Google Drive file download failed.")
+    adapter.get_file_metadata.side_effect = error
+
+    with pytest.raises(DriveAPIError) as raised:
+        ingest_drive_file(adapter, "drive-file-id")
 
     assert raised.value is error

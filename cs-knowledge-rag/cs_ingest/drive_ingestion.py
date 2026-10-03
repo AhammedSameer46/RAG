@@ -3,7 +3,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
+import tempfile
 from typing import Any, Protocol
+
+from .ingest import ingest_directory
 
 PDF_MIME_TYPE = "application/pdf"
 XLSX_MIME_TYPE = (
@@ -105,6 +109,18 @@ def load_drive_file(
         web_view_link=_optional_string(metadata.get("webViewLink")),
         mime_type=mime_type,
     )
+
+
+def ingest_drive_file(
+    adapter: DriveFileAdapter,
+    file_id: str,
+) -> dict[str, Any]:
+    """Materialize one Drive file and process it through local extraction."""
+    drive_file = load_drive_file(adapter, file_id)
+    with tempfile.TemporaryDirectory(prefix="cs-rag-drive-") as temporary_dir:
+        file_path = Path(temporary_dir) / drive_file.filename
+        file_path.write_bytes(drive_file.content)
+        return ingest_directory(temporary_dir)
 
 
 def _file_type_for_mime(mime_type: Any) -> str:

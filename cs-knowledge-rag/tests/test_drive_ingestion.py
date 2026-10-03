@@ -118,6 +118,38 @@ def test_pdf_is_materialized_and_sent_to_existing_ingestion(monkeypatch):
     assert not observed["path"].exists()
 
 
+def test_pdf_raw_source_preserves_drive_provenance(monkeypatch):
+    adapter = _adapter("application/pdf", b"%PDF-test")
+    monkeypatch.setattr(
+        "cs_ingest.drive_ingestion.ingest_directory",
+        lambda input_dir: {
+            "schema_version": 1,
+            "sources": [
+                {
+                    "filename": "minutes.pdf",
+                    "file_type": "pdf",
+                    "sha256": "a" * 64,
+                    "size_bytes": 9,
+                }
+            ],
+            "pdf_pages": [],
+            "worksheets": [],
+            "dates": [],
+        },
+    )
+
+    result = ingest_drive_file(adapter, "drive-file-id")
+
+    assert result["sources"][0]["drive_provenance"] == {
+        "file_id": "drive-file-id",
+        "file_name": "minutes.pdf",
+        "mime_type": "application/pdf",
+        "parent_ids": ["folder-id", "root-id"],
+        "modified_time": "2026-10-03T10:00:00Z",
+        "web_view_link": "https://drive.google.com/file/drive-file-id",
+    }
+
+
 def test_xlsx_is_materialized_with_original_filename(monkeypatch):
     adapter = _adapter(
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -147,6 +179,38 @@ def test_xlsx_is_materialized_with_original_filename(monkeypatch):
     assert result["sources"][0]["filename"] == "data.xlsx"
     assert observed["files"] == ["data.xlsx"]
     assert observed["content"] == b"xlsx bytes"
+
+
+def test_xlsx_raw_source_preserves_drive_provenance_without_optional_fields(
+    monkeypatch,
+):
+    adapter = _adapter(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    adapter.get_file_metadata.return_value["modifiedTime"] = None
+    adapter.get_file_metadata.return_value["webViewLink"] = None
+    monkeypatch.setattr(
+        "cs_ingest.drive_ingestion.ingest_directory",
+        lambda input_dir: {
+            "schema_version": 1,
+            "sources": [
+                {
+                    "filename": "data.xlsx",
+                    "file_type": "xlsx",
+                    "sha256": "b" * 64,
+                    "size_bytes": 10,
+                }
+            ],
+            "pdf_pages": [],
+            "worksheets": [],
+            "dates": [],
+        },
+    )
+
+    result = ingest_drive_file(adapter, "drive-file-id")
+
+    assert result["sources"][0]["drive_provenance"]["modified_time"] is None
+    assert result["sources"][0]["drive_provenance"]["web_view_link"] is None
 
 
 def test_materialized_file_is_cleaned_up_when_extraction_fails(monkeypatch):

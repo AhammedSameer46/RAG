@@ -120,7 +120,21 @@ def ingest_drive_file(
     with tempfile.TemporaryDirectory(prefix="cs-rag-drive-") as temporary_dir:
         file_path = Path(temporary_dir) / drive_file.filename
         file_path.write_bytes(drive_file.content)
-        return ingest_directory(temporary_dir)
+        result = ingest_directory(temporary_dir)
+    source = next(
+        source
+        for source in result["sources"]
+        if source["filename"] == drive_file.filename
+    )
+    source["drive_provenance"] = {
+        "file_id": drive_file.drive_file_id,
+        "file_name": drive_file.drive_file_name,
+        "mime_type": drive_file.drive_mime_type,
+        "parent_ids": list(drive_file.drive_parent_ids),
+        "modified_time": drive_file.drive_modified_time,
+        "web_view_link": drive_file.drive_web_view_link,
+    }
+    return result
 
 
 def _file_type_for_mime(mime_type: Any) -> str:

@@ -18,6 +18,35 @@ class NormalizationTests(unittest.TestCase):
         source = self.data["sources"][0]
         self.assertEqual(source["source_id"], f"sha256:{source['sha256']}")
 
+    def test_drive_provenance_is_preserved_only_on_source(self):
+        data = json.loads(json.dumps(INPUT))
+        source = data["sources"][0]
+        source["drive_provenance"] = {
+            "file_id": "drive-file-id",
+            "file_name": source["filename"],
+            "mime_type": "application/pdf",
+            "parent_ids": ["folder-id"],
+            "modified_time": "2026-10-03T10:00:00Z",
+            "web_view_link": "https://drive.google.com/file/drive-file-id",
+        }
+
+        normalized = normalize_ingestion(data)
+        normalized_source = next(
+            item for item in normalized["sources"] if item["filename"] == source["filename"]
+        )
+
+        self.assertEqual(
+            normalized_source["drive_provenance"],
+            source["drive_provenance"],
+        )
+        self.assertTrue(
+            all("drive_provenance" not in item for item in normalized["evidence_units"])
+        )
+        self.assertEqual(
+            normalized_source["source_id"],
+            f"sha256:{normalized_source['sha256']}",
+        )
+
     def test_pdf_evidence_provenance(self):
         page = next(item for item in self.data["evidence_units"] if item["kind"] == "pdf_page")
         self.assertEqual(page["source_id"], "sha256:" + page["source_id"].split("sha256:", 1)[1].split(":", 1)[0])

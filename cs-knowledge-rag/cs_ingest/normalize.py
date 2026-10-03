@@ -262,16 +262,7 @@ def normalize_ingestion(data: dict[str, Any]) -> dict[str, Any]:
     evidence.extend(worksheet_evidence)
     return {
         "schema_version": 1,
-        "sources": [
-            {
-                "source_id": source_ids[source["filename"]],
-                "filename": source["filename"],
-                "file_type": source["file_type"],
-                "sha256": source["sha256"],
-                "size_bytes": source["size_bytes"],
-            }
-            for source in data["sources"]
-        ],
+        "sources": [_normalize_source(source, source_ids) for source in data["sources"]],
         "evidence_units": evidence,
         "date_mentions": _date_mentions(data, source_ids),
         "records": (
@@ -280,6 +271,21 @@ def normalize_ingestion(data: dict[str, Any]) -> dict[str, Any]:
             + _attendance_records(data, source_ids)
         ),
     }
+
+
+def _normalize_source(
+    source: dict[str, Any], source_ids: dict[str, str]
+) -> dict[str, Any]:
+    normalized = {
+        "source_id": source_ids[source["filename"]],
+        "filename": source["filename"],
+        "file_type": source["file_type"],
+        "sha256": source["sha256"],
+        "size_bytes": source["size_bytes"],
+    }
+    if "drive_provenance" in source:
+        normalized["drive_provenance"] = source["drive_provenance"]
+    return normalized
 
 
 def normalize_json_file(input_path: str | Path, output_path: str | Path) -> dict[str, Any]:

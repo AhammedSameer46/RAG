@@ -134,6 +134,67 @@ class Repository:
             ),
         )
 
+    def save_drive_sync_run(self, sync_run: Mapping[str, Any]) -> None:
+        """Persist one Drive sync-run state without owning the transaction."""
+        self.connection.execute(
+            """
+            INSERT INTO drive_sync_run
+                (sync_run_id, root_folder_id, started_at, completed_at, status)
+            VALUES (%s, %s, %s, %s, %s)
+            ON CONFLICT (sync_run_id) DO UPDATE SET
+                root_folder_id = EXCLUDED.root_folder_id,
+                started_at = EXCLUDED.started_at,
+                completed_at = EXCLUDED.completed_at,
+                status = EXCLUDED.status
+            """,
+            (
+                sync_run["sync_run_id"],
+                sync_run["root_folder_id"],
+                sync_run["started_at"],
+                sync_run.get("completed_at"),
+                sync_run["status"],
+            ),
+        )
+
+    def save_drive_file(self, drive_file: Mapping[str, Any]) -> None:
+        """Persist the latest state for one Drive object."""
+        self.connection.execute(
+            """
+            INSERT INTO drive_file
+                (drive_file_id, root_folder_id, source_id, name, mime_type,
+                 parent_ids, modified_time, web_view_link,
+                 indexed_modified_time, last_seen_run_id, last_seen_at,
+                 last_indexed_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (drive_file_id) DO UPDATE SET
+                root_folder_id = EXCLUDED.root_folder_id,
+                source_id = EXCLUDED.source_id,
+                name = EXCLUDED.name,
+                mime_type = EXCLUDED.mime_type,
+                parent_ids = EXCLUDED.parent_ids,
+                modified_time = EXCLUDED.modified_time,
+                web_view_link = EXCLUDED.web_view_link,
+                indexed_modified_time = EXCLUDED.indexed_modified_time,
+                last_seen_run_id = EXCLUDED.last_seen_run_id,
+                last_seen_at = EXCLUDED.last_seen_at,
+                last_indexed_at = EXCLUDED.last_indexed_at
+            """,
+            (
+                drive_file["drive_file_id"],
+                drive_file["root_folder_id"],
+                drive_file.get("source_id"),
+                drive_file["name"],
+                drive_file["mime_type"],
+                Jsonb(drive_file["parent_ids"]),
+                drive_file.get("modified_time"),
+                drive_file.get("web_view_link"),
+                drive_file.get("indexed_modified_time"),
+                drive_file.get("last_seen_run_id"),
+                drive_file["last_seen_at"],
+                drive_file.get("last_indexed_at"),
+            ),
+        )
+
     def save_normalized_dataset(self, dataset: Mapping[str, Any]) -> None:
         """Persist one normalized dataset using the caller's transaction."""
         for source in dataset["sources"]:

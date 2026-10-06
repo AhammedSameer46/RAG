@@ -10,6 +10,8 @@ from typing import Any
 from psycopg import Connection
 from psycopg.types.json import Jsonb
 
+from .drive_sync import PreviousDriveFileState
+
 
 class Repository:
     """Persist normalized sources, evidence, records, and date mentions.
@@ -194,6 +196,29 @@ class Repository:
                 drive_file.get("last_indexed_at"),
             ),
         )
+
+    def list_drive_file_states(
+        self,
+        root_folder_id: str,
+    ) -> list[PreviousDriveFileState]:
+        """Return prior Drive state for one configured root."""
+        rows = self.connection.execute(
+            """
+            SELECT root_folder_id, drive_file_id, indexed_modified_time
+            FROM drive_file
+            WHERE root_folder_id = %s
+            ORDER BY drive_file_id
+            """,
+            (root_folder_id,),
+        ).fetchall()
+        return [
+            PreviousDriveFileState(
+                root_folder_id=row[0],
+                drive_file_id=row[1],
+                indexed_modified_time=row[2],
+            )
+            for row in rows
+        ]
 
     def save_normalized_dataset(self, dataset: Mapping[str, Any]) -> None:
         """Persist one normalized dataset using the caller's transaction."""

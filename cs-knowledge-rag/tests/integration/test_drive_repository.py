@@ -7,6 +7,11 @@ import psycopg
 import pytest
 
 from cs_ingest.database import DatabaseConfigurationError, get_connection
+from cs_ingest.drive_discovery import DriveFileMetadata
+from cs_ingest.drive_sync import (
+    DriveSyncClassification,
+    classify_drive_inventory,
+)
 from cs_ingest.repository import Repository
 
 
@@ -237,4 +242,87 @@ def test_repository_preserves_caller_transaction_ownership():
             assert cursor.fetchone() == (0,)
     finally:
         connection.rollback()
+        connection.close()
+
+
+def test_repository_lists_drive_file_states_for_one_root():
+    connection = _database_connection()
+    suffix = uuid4().hex
+    root_folder_id = f"state-root-{suffix}"
+    other_root_folder_id = f"other-root-{suffix}"
+    first_file_id = f"drive-file-b-{suffix}"
+    second_file_id = f"drive-file-a-{suffix}"
+    other_file_id = f"drive-file-other-{suffix}"
+    indexed_at = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+
+    try:
+        repository = Repository(connection)
+        with connection.transaction():
+            for drive_file_id, root, indexed_modified_time in (
+                (first_file_id, root_folder_id, indexed_at),
+                (second_file_id, root_folder_id, None),
+                (other_file_id, other_root_folder_id, indexed_at),
+            ):
+                repository.save_drive_file(
+                    {
+                        "drive_file_id": drive_file_id,
+                        "root_folder_id": root,
+                        "source_id": None,
+                        "name": f"{drive_file_id}.pdf",
+                        "mime_type": "application/pdf",
+                        "parent_ids": [root],
+                        "modified_time": indexed_modified_time,
+                        "web_view_link": None,
+                        "indexed_modified_time": indexed_modified_time,
+                        "last_seen_run_id": None,
+                        "last_seen_at": indexed_at,
+                        "last_indexed_at": indexed_at,
+                    }
+                )
+
+        states = repository.list_drive_file_states(root_folder_id)
+
+        assert [state.drive_file_id for state in states] == [
+            second_file_id,
+            first_file_id,
+        ]
+        assert states[0].root_folder_id == root_folder_id
+        assert states[0].indexed_modified_time is None
+        assert states[1].indexed_modified_time == indexed_at
+        assert states[1].indexed_modified_time.tzinfo is not None
+        assert repository.list_drive_file_states(
+            f"empty-root-{suffix}"
+        ) == []
+
+        current_inventory = [
+            DriveFileMetadata(
+                file_id=first_file_id,
+                name="first.pdf",
+                mime_type="application/pdf",
+                parent_ids=(root_folder_id,),
+                modified_time="2026-10-06T12:00:00Z",
+                web_view_link=None,
+            )
+        ]
+        classifications = classify_drive_inventory(
+            root_folder_id,
+            current_inventory,
+            states,
+            discovery_completed=True,
+        )
+        assert [item.classification for item in classifications] == [
+            DriveSyncClassification.DELETED,
+            DriveSyncClassification.UNCHANGED,
+        ]
+    finally:
+        connection.rollback()
+        with connection.transaction():
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    DELETE FROM drive_file
+                    WHERE drive_file_id IN (%s, %s, %s)
+                    """,
+                    (first_file_id, second_file_id, other_file_id),
+                )
         connection.close()

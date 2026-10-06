@@ -110,6 +110,24 @@ def classify_drive_inventory(
     return sorted(results, key=lambda result: result.drive_file_id)
 
 
+def select_content_sync_candidates(
+    classifications: Iterable[DriveSyncClassificationResult],
+) -> list[DriveSyncClassificationResult]:
+    """Select current Drive objects that require content indexing."""
+    return sorted(
+        (
+            result
+            for result in classifications
+            if result.classification
+            in (
+                DriveSyncClassification.NEW,
+                DriveSyncClassification.MODIFIED,
+            )
+        ),
+        key=lambda result: result.drive_file_id,
+    )
+
+
 def _classify_present_file(
     current: CurrentDriveInventoryItem,
     previous: PreviousDriveFileState | None,

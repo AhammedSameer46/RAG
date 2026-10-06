@@ -10,6 +10,7 @@ from cs_ingest.drive_ingestion import (
     UnsupportedDriveFileTypeError,
     ingest_drive_file,
     load_drive_file,
+    normalize_drive_file,
 )
 
 
@@ -189,6 +190,7 @@ def test_xlsx_raw_source_preserves_drive_provenance_without_optional_fields(
     )
     adapter.get_file_metadata.return_value["modifiedTime"] = None
     adapter.get_file_metadata.return_value["webViewLink"] = None
+
     monkeypatch.setattr(
         "cs_ingest.drive_ingestion.ingest_directory",
         lambda input_dir: {
@@ -243,3 +245,55 @@ def test_drive_adapter_errors_propagate_before_materialization():
         ingest_drive_file(adapter, "drive-file-id")
 
     assert raised.value is error
+
+
+def test_normalize_drive_file_returns_normalized_source_with_drive_provenance(
+    monkeypatch,
+):
+    adapter = _adapter("application/pdf", b"%PDF-test")
+
+    monkeypatch.setattr(
+        "cs_ingest.drive_ingestion.ingest_directory",
+        lambda input_dir: {
+            "schema_version": 1,
+            "sources": [
+                {
+                    "filename": "minutes.pdf",
+                    "file_type": "pdf",
+                    "sha256": "a" * 64,
+                    "size_bytes": 9,
+                }
+            ],
+            "pdf_pages": [],
+            "worksheets": [],
+            "dates": [],
+        },
+    )
+
+    monkeypatch.setattr(
+        "cs_ingest.drive_ingestion.normalize_ingestion",
+        lambda extracted: {
+            "schema_version": 1,
+            "sources": [
+                {
+                    **extracted["sources"][0],
+                    "source_id": (
+                        "sha256:" + extracted["sources"][0]["sha256"]
+                    ),
+                }
+            ],
+            "evidence_units": [],
+            "date_mentions": [],
+            "records": [],
+        },
+    )
+
+    result = normalize_drive_file(adapter, "drive-file-id")
+
+    source = result["sources"][0]
+
+    assert source["source_id"] == "sha256:" + "a" * 64
+    assert source["filename"] == "minutes.pdf"
+    assert source["file_type"] == "pdf"
+    assert source["drive_provenance"]["file_id"] == "drive-file-id"
+    assert source["drive_provenance"]["mime_type"] == "application/pdf"

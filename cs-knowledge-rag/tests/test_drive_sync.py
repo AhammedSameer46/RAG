@@ -5,8 +5,10 @@ import pytest
 from cs_ingest.drive_discovery import DriveFileMetadata
 from cs_ingest.drive_sync import (
     DriveSyncClassification,
+    DriveSyncClassificationResult,
     PreviousDriveFileState,
     classify_drive_inventory,
+    select_content_sync_candidates,
 )
 
 
@@ -170,3 +172,80 @@ def test_naive_drive_timestamp_is_rejected():
             [],
             True,
         )
+
+
+def _classification(
+    drive_file_id: str,
+    classification: DriveSyncClassification,
+):
+    return DriveSyncClassificationResult(
+        drive_file_id=drive_file_id,
+        classification=classification,
+        current=None,
+        previous=None,
+    )
+
+
+def test_content_sync_candidates_select_new_file():
+    result = select_content_sync_candidates(
+        [_classification("new", DriveSyncClassification.NEW)]
+    )
+
+    assert [item.drive_file_id for item in result] == ["new"]
+
+
+def test_content_sync_candidates_select_modified_file():
+    result = select_content_sync_candidates(
+        [_classification("changed", DriveSyncClassification.MODIFIED)]
+    )
+
+    assert [item.drive_file_id for item in result] == ["changed"]
+
+
+def test_content_sync_candidates_skip_unchanged_and_deleted_files():
+    result = select_content_sync_candidates(
+        [
+            _classification("same", DriveSyncClassification.UNCHANGED),
+            _classification("gone", DriveSyncClassification.DELETED),
+        ]
+    )
+
+    assert result == []
+
+
+def test_content_sync_candidates_return_only_new_and_modified_files():
+    result = select_content_sync_candidates(
+        [
+            _classification("same", DriveSyncClassification.UNCHANGED),
+            _classification("changed", DriveSyncClassification.MODIFIED),
+            _classification("gone", DriveSyncClassification.DELETED),
+            _classification("new", DriveSyncClassification.NEW),
+        ]
+    )
+
+    assert [item.drive_file_id for item in result] == ["changed", "new"]
+
+
+def test_content_sync_candidates_are_sorted_deterministically():
+    result = select_content_sync_candidates(
+        [
+            _classification("z-file", DriveSyncClassification.NEW),
+            _classification("a-file", DriveSyncClassification.MODIFIED),
+        ]
+    )
+
+    assert [item.drive_file_id for item in result] == ["a-file", "z-file"]
+
+
+def test_content_sync_candidate_selection_does_not_change_classifications():
+    classifications = [
+        _classification("new", DriveSyncClassification.NEW),
+        _classification("same", DriveSyncClassification.UNCHANGED),
+    ]
+
+    select_content_sync_candidates(classifications)
+
+    assert [item.classification for item in classifications] == [
+        DriveSyncClassification.NEW,
+        DriveSyncClassification.UNCHANGED,
+    ]

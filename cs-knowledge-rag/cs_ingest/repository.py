@@ -204,7 +204,8 @@ class Repository:
         """Return prior Drive state for one configured root."""
         rows = self.connection.execute(
             """
-            SELECT root_folder_id, drive_file_id, indexed_modified_time
+            SELECT root_folder_id, drive_file_id, indexed_modified_time,
+                   source_id, last_indexed_at
             FROM drive_file
             WHERE root_folder_id = %s
             ORDER BY drive_file_id
@@ -216,6 +217,8 @@ class Repository:
                 root_folder_id=row[0],
                 drive_file_id=row[1],
                 indexed_modified_time=row[2],
+                source_id=row[3],
+                last_indexed_at=row[4],
             )
             for row in rows
         ]

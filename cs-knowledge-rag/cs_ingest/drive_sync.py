@@ -55,6 +55,8 @@ class PreviousDriveFileState:
     root_folder_id: str
     drive_file_id: str
     indexed_modified_time: datetime | None
+    source_id: str | None = None
+    last_indexed_at: datetime | None = None
 
 
 @dataclass(frozen=True)

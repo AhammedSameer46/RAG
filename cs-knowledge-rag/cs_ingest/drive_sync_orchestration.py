@@ -1,3 +1,4 @@
+
 """Caller-owned orchestration primitives for Drive object-state synchronization."""
 
 from __future__ import annotations
@@ -22,6 +23,14 @@ class DriveSyncRepository(Protocol):
     def list_drive_file_states(
         self, root_folder_id: str
     ) -> list[PreviousDriveFileState]: ...
+
+    def save_drive_file(self, drive_file: dict[str, Any]) -> None: ...
+
+
+class DriveContentIndexRepository(Protocol):
+    """Repository operations needed to persist one indexed Drive file."""
+
+    def save_normalized_dataset(self, dataset: dict[str, Any]) -> None: ...
 
     def save_drive_file(self, drive_file: dict[str, Any]) -> None: ...
 
@@ -155,3 +164,120 @@ def record_drive_sync_failure(
             "status": "failed",
         }
     )
+
+
+def persist_indexed_drive_file(
+    repository: DriveContentIndexRepository,
+    *,
+    sync_run_id: str,
+    observed_at: datetime,
+    classification: DriveSyncClassificationResult,
+    dataset: dict[str, Any],
+) -> None:
+    """Persist one normalized Drive file and its indexed state.
+
+    The caller owns the database transaction. The normalized dataset and
+    Drive-file indexing metadata must be committed or rolled back together.
+    """
+    if classification.classification not in {
+        DriveSyncClassification.NEW,
+        DriveSyncClassification.MODIFIED,
+    }:
+        raise ValueError(
+            "Only NEW or MODIFIED Drive files can be content-indexed."
+        )
+
+    current = classification.current
+    if current is None:
+        raise ValueError(
+            "A content-indexing classification must include current Drive metadata."
+        )
+
+    sources = dataset.get("sources")
+    if not isinstance(sources, list) or len(sources) != 1:
+        raise ValueError(
+            "The normalized dataset must contain exactly one source."
+        )
+
+    source = sources[0]
+    if not isinstance(source, dict):
+        raise ValueError("The normalized source must be a dictionary.")
+
+    source_id = source.get("source_id")
+    if not isinstance(source_id, str) or not source_id:
+        raise ValueError(
+            "The normalized source must have a non-empty source_id."
+        )
+
+    provenance = source.get("drive_provenance")
+    if not isinstance(provenance, dict):
+        raise ValueError(
+            "The normalized source must contain Drive provenance."
+        )
+
+    if provenance.get("file_id") != current.drive_file_id:
+        raise ValueError(
+            "The normalized source's Drive file ID does not match "
+            "the classified Drive file."
+        )
+
+    content_modified_time = _parse_content_modified_time(
+        provenance.get("modified_time")
+    )
+
+    if content_modified_time is None or current.modified_time is None:
+        raise ValueError(
+            "Drive modification time is unknown; refusing to mark "
+            "potentially stale content as indexed."
+        )
+
+    if content_modified_time != current.modified_time:
+        raise ValueError(
+            "The Drive file's modification time changed between discovery "
+            "and content download; refusing to mark potentially stale "
+            "content as indexed."
+        )
+
+    # Both writes are part of the caller-owned transaction.
+    repository.save_normalized_dataset(dataset)
+    repository.save_drive_file(
+        {
+            "drive_file_id": current.drive_file_id,
+            "root_folder_id": current.root_folder_id,
+            "source_id": source_id,
+            "name": current.name,
+            "mime_type": current.mime_type,
+            "parent_ids": list(current.parent_ids),
+            "modified_time": current.modified_time,
+            "web_view_link": current.web_view_link,
+            "indexed_modified_time": content_modified_time,
+            "last_seen_run_id": sync_run_id,
+            "last_seen_at": observed_at,
+            "last_indexed_at": observed_at,
+        }
+    )
+
+
+def _parse_content_modified_time(value: Any) -> datetime | None:
+    """Parse an ISO timestamp and reject timestamps without a timezone."""
+    if value is None:
+        return None
+
+    if not isinstance(value, str):
+        raise ValueError(
+            "Drive provenance modified_time must be an ISO string or None."
+        )
+
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValueError(
+            "Drive provenance contains an invalid modified_time."
+        ) from exc
+
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        raise ValueError(
+            "Drive provenance modified_time must include a timezone."
+        )
+
+    return parsed

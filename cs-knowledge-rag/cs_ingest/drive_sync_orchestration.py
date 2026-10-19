@@ -8,7 +8,11 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Protocol
 
-from .drive_discovery import DriveDiscoveryAdapter, DriveFileMetadata, discover_drive_files
+from .drive_discovery import (
+    DriveDiscoveryAdapter,
+    DriveFileMetadata,
+    discover_drive_files,
+)
 from .drive_sync import (
     DriveSyncClassification,
     DriveSyncClassificationResult,
@@ -33,6 +37,10 @@ class DriveContentIndexRepository(Protocol):
     def save_normalized_dataset(self, dataset: dict[str, Any]) -> None: ...
 
     def save_drive_file(self, drive_file: dict[str, Any]) -> None: ...
+
+    def get_drive_file_source_id(self, drive_file_id: str) -> str | None: ...
+
+    def cleanup_source_if_unreferenced(self, source_id: str) -> bool: ...
 
 
 @dataclass(frozen=True)
@@ -105,13 +113,17 @@ def persist_successful_drive_state(
         for result in classification_list
         if result.previous is not None
     }
+
     for result in classification_list:
         if result.classification is DriveSyncClassification.DELETED:
             continue
+
         current = result.current
         if current is None:
             raise RuntimeError("Non-deleted classification has no current file.")
+
         prior = previous_by_id.get(result.drive_file_id)
+
         repository.save_drive_file(
             {
                 "drive_file_id": current.drive_file_id,
@@ -127,9 +139,12 @@ def persist_successful_drive_state(
                 ),
                 "last_seen_run_id": sync_run_id,
                 "last_seen_at": observed_at,
-                "last_indexed_at": None if prior is None else prior.last_indexed_at,
+                "last_indexed_at": (
+                    None if prior is None else prior.last_indexed_at
+                ),
             }
         )
+
     repository.save_drive_sync_run(
         {
             "sync_run_id": sync_run_id,
@@ -139,6 +154,7 @@ def persist_successful_drive_state(
             "status": "succeeded",
         }
     )
+
     return DriveSyncRunResult(
         sync_run_id=sync_run_id,
         root_folder_id=root_folder_id,
@@ -174,10 +190,10 @@ def persist_indexed_drive_file(
     classification: DriveSyncClassificationResult,
     dataset: dict[str, Any],
 ) -> None:
-    """Persist one normalized Drive file and its indexed state.
+    """Persist normalized content and Drive state atomically.
 
-    The caller owns the database transaction. The normalized dataset and
-    Drive-file indexing metadata must be committed or rolled back together.
+    The caller owns the database transaction. New content, Drive metadata,
+    and any obsolete-source cleanup must commit or roll back together.
     """
     if classification.classification not in {
         DriveSyncClassification.NEW,
@@ -238,8 +254,14 @@ def persist_indexed_drive_file(
             "content as indexed."
         )
 
-    # Both writes are part of the caller-owned transaction.
+    # Remember the previous source association before changing the Drive row.
+    old_source_id = repository.get_drive_file_source_id(
+        current.drive_file_id
+    )
+
+    # All writes are part of the caller-owned transaction.
     repository.save_normalized_dataset(dataset)
+
     repository.save_drive_file(
         {
             "drive_file_id": current.drive_file_id,
@@ -256,6 +278,11 @@ def persist_indexed_drive_file(
             "last_indexed_at": observed_at,
         }
     )
+
+    # Remove old content only after the Drive row points to the new source.
+    # The repository checks whether another Drive file still references it.
+    if old_source_id is not None and old_source_id != source_id:
+        repository.cleanup_source_if_unreferenced(old_source_id)
 
 
 def _parse_content_modified_time(value: Any) -> datetime | None:

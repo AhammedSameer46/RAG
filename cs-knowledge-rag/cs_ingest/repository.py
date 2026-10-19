@@ -1,9 +1,10 @@
+
 """Persistence operations for the existing normalized data model."""
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 from collections import defaultdict
+from collections.abc import Mapping
 from datetime import date
 from typing import Any
 
@@ -14,10 +15,9 @@ from .drive_sync import PreviousDriveFileState
 
 
 class Repository:
-    """Persist normalized sources, evidence, records, and date mentions.
+    """Persist normalized data using a caller-owned transaction.
 
-    The caller owns the connection and transaction boundary. Methods do not
-    commit or close the supplied connection.
+    Methods do not commit or close the supplied connection.
     """
 
     def __init__(self, connection: Connection[Any]) -> None:
@@ -137,7 +137,7 @@ class Repository:
         )
 
     def save_drive_sync_run(self, sync_run: Mapping[str, Any]) -> None:
-        """Persist one Drive sync-run state without owning the transaction."""
+        """Persist one Drive sync-run state."""
         self.connection.execute(
             """
             INSERT INTO drive_sync_run
@@ -212,6 +212,7 @@ class Repository:
             """,
             (root_folder_id,),
         ).fetchall()
+
         return [
             PreviousDriveFileState(
                 root_folder_id=row[0],
@@ -224,18 +225,22 @@ class Repository:
         ]
 
     def save_normalized_dataset(self, dataset: Mapping[str, Any]) -> None:
-        """Persist one normalized dataset using the caller's transaction."""
+        """Persist a normalized dataset using the caller's transaction."""
         for source in dataset["sources"]:
             self.save_source(source)
+
         for evidence in dataset["evidence_units"]:
             self.save_evidence(evidence)
+
         for record in dataset["records"]:
             self.save_record(record)
             for reference in record["evidence_refs"]:
                 self.save_record_evidence(
                     record["record_id"], reference["evidence_id"]
                 )
+
         occurrences: defaultdict[tuple[Any, ...], int] = defaultdict(int)
+
         for mention in dataset["date_mentions"]:
             identity = (
                 mention["evidence_id"],
@@ -245,6 +250,127 @@ class Repository:
             )
             occurrences[identity] += 1
             self.save_date_mention(mention, occurrences[identity])
+
+    def get_drive_file_source_id(self, drive_file_id: str) -> str | None:
+        """Return the currently indexed source for a Drive file."""
+        row = self.connection.execute(
+            """
+            SELECT source_id
+            FROM drive_file
+            WHERE drive_file_id = %s
+            """,
+            (drive_file_id,),
+        ).fetchone()
+
+        return None if row is None else row[0]
+
+    def cleanup_source_if_unreferenced(self, source_id: str) -> bool:
+        """Delete obsolete source data only when no Drive file references it.
+
+        Returns True if the source row was deleted, otherwise False.
+        The caller owns the transaction.
+        """
+        # Lock the source row to prevent concurrent FK references from being
+        # added while its evidence and related data are being removed.
+        source_row = self.connection.execute(
+            """
+            SELECT source_id
+            FROM source
+            WHERE source_id = %s
+            FOR UPDATE
+            """,
+            (source_id,),
+        ).fetchone()
+
+        if source_row is None:
+            return False
+
+        referenced = self.connection.execute(
+            """
+            SELECT 1
+            FROM drive_file
+            WHERE source_id = %s
+            LIMIT 1
+            """,
+            (source_id,),
+        ).fetchone()
+
+        if referenced is not None:
+            return False
+
+        # Find records that were linked to evidence from this source.
+        record_rows = self.connection.execute(
+            """
+            SELECT DISTINCT re.record_id
+            FROM record_evidence AS re
+            JOIN evidence AS e ON e.evidence_id = re.evidence_id
+            WHERE e.source_id = %s
+            """,
+            (source_id,),
+        ).fetchall()
+        record_ids = [row[0] for row in record_rows]
+
+        # Delete child rows before their referenced evidence.
+        self.connection.execute(
+            """
+            DELETE FROM date_mention AS dm
+            USING evidence AS e
+            WHERE dm.evidence_id = e.evidence_id
+              AND e.source_id = %s
+            """,
+            (source_id,),
+        )
+
+        self.connection.execute(
+            """
+            DELETE FROM record_evidence AS re
+            USING evidence AS e
+            WHERE re.evidence_id = e.evidence_id
+              AND e.source_id = %s
+            """,
+            (source_id,),
+        )
+
+        self.connection.execute(
+            "DELETE FROM evidence WHERE source_id = %s",
+            (source_id,),
+        )
+
+        # Keep records that are still supported by other evidence.
+        if record_ids:
+            self.connection.execute(
+                """
+                DELETE FROM record AS r
+                WHERE r.record_id = ANY(%s)
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM record_evidence AS re
+                      WHERE re.record_id = r.record_id
+                  )
+                """,
+                (record_ids,),
+            )
+
+        deleted = self.connection.execute(
+            """
+            DELETE FROM source AS s
+            WHERE s.source_id = %s
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM drive_file AS df
+                  WHERE df.source_id = s.source_id
+              )
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM evidence AS e
+                  WHERE e.source_id = s.source_id
+              )
+            RETURNING s.source_id
+            """,
+            (source_id,),
+        ).fetchone()
+
+        return deleted is not None
 
 
 def _jsonb(value: Any) -> Jsonb[Any] | None:

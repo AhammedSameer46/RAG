@@ -30,6 +30,10 @@ class DriveSyncRepository(Protocol):
 
     def save_drive_file(self, drive_file: dict[str, Any]) -> None: ...
 
+    def delete_drive_file(self, drive_file_id: str) -> str | None: ...
+
+    def cleanup_source_if_unreferenced(self, source_id: str) -> bool: ...
+
 
 class DriveContentIndexRepository(Protocol):
     """Repository operations needed to persist one indexed Drive file."""
@@ -116,6 +120,12 @@ def persist_successful_drive_state(
 
     for result in classification_list:
         if result.classification is DriveSyncClassification.DELETED:
+            # A DELETED classification is produced only after successful
+            # inventory discovery. Remove its Drive mapping, then remove the
+            # old content only if no other Drive file still references it.
+            source_id = repository.delete_drive_file(result.drive_file_id)
+            if source_id is not None:
+                repository.cleanup_source_if_unreferenced(source_id)
             continue
 
         current = result.current

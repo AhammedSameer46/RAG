@@ -251,6 +251,23 @@ class Repository:
             occurrences[identity] += 1
             self.save_date_mention(mention, occurrences[identity])
 
+    def delete_drive_file(self, drive_file_id: str) -> str | None:
+        """Delete a Drive mapping and return its former source ID.
+
+        The caller owns the transaction. This method does not commit or roll
+        back the connection.
+        """
+        row = self.connection.execute(
+            """
+            DELETE FROM drive_file
+            WHERE drive_file_id = %s
+            RETURNING source_id
+            """,
+            (drive_file_id,),
+        ).fetchone()
+
+        return None if row is None else row[0]
+
     def get_drive_file_source_id(self, drive_file_id: str) -> str | None:
         """Return the currently indexed source for a Drive file."""
         row = self.connection.execute(
